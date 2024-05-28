@@ -1,0 +1,168 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+* {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	line-height: 1.75em;
+	font-size: 16px;
+	background-color: #222;
+	color: #cccccc;
+}
+
+div#toggle,#standard_splits {
+    display: inline-block;
+    background-color: #444;
+    padding: 15px;
+}
+
+div#controls {
+    padding: 5px;
+}
+
+div button {
+    border: none;
+    background-color: #222;
+    color: #ccc;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 15px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button#resetBtn {
+    background-color: #750000;
+}
+
+button#toggleStrata {
+    background-color: #007a00;
+    width: 150px;
+}
+
+div#standard_splits button {
+    background-color: #0057a8;
+    width: 150px;
+}
+
+.leaflet-tooltip {
+    background-color: white;
+    font-size: x-large;
+    font-weight: bold;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.leaflet-tooltip.AUSS, .WEST {
+    background-color: #F09EA7;
+}
+
+.leaflet-tooltip.LFKS, .NORTH {
+    background-color: #CDABEB;
+}
+
+.leaflet-tooltip.CRPS {
+    background-color: #F6CA94;
+}
+
+.leaflet-tooltip.LCHS, .SOUTH {
+    background-color: #C1EBC0;
+}
+
+.leaflet-tooltip.NEWS, .EAST {
+    background-color: #FAFABE;
+}
+
+.leaflet-tooltip.OCNS {
+    background-color: #C7CAFF;
+}
+
+.leaflet-tooltip.RSGS {
+    background-color: #F6C2F3;
+}
+
+.simple-container {
+	max-width: 675px;
+	margin: 0 auto;
+	padding-top: 70px;
+	padding-bottom: 20px;
+}
+
+.simple-print {
+	fill: white;
+	stroke: white;
+}
+.simple-print svg {
+	height: 100%;
+}
+
+.simple-close {
+	color: white;
+	border-color: white;
+}
+
+.simple-ext-info {
+	border-top: 1px solid #aaa;
+}
+
+p {
+	font-size: 16px;
+}
+
+h1 {
+	font-size: 30px;
+	line-height: 34px;
+}
+
+h2 {
+	font-size: 20px;
+	line-height: 25px;
+}
+
+h3 {
+	font-size: 16px;
+	line-height: 5px;
+}
+
+hr {
+	height: 1px;
+	background-color: #d8d8d8;
+	border: none;
+	width: 100%;
+	margin: 0px;
+}
+
+a[href] {
+	color: #1e8ad6;
+}
+
+a[href]:hover {
+	color: #3ba0e6;
+}
+
+img {
+	max-width: 100%;
+}
+
+li {
+	line-height: 1.5em;
+}
+
+aside,
+[class *= "sidebar"],
+[id *= "sidebar"] {
+	max-width: 90%;
+	margin: 0 auto;
+	border: 1px solid lightgrey;
+	padding: 5px 15px;
+}
+
+@media (min-width: 1921px) {
+	body {
+		font-size: 18px;
+	}
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZHU Enroute Splits</title>
+    <!-- Include Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="controls">
+        <div id="toggle">
+            Map Controls:<br />
+            <button id="toggleStrata" class="toggle">Toggle Strata</button>
+            <button id="resetBtn" class="reset">Reset</button>
+        </div>
+        <div id="standard_splits">
+            Split by:<br />
+            <button id="splitBySpecialtyBtnHigh" class="button">Specialty</button>
+            <button id="splitByDirectionBtnHigh" class="button">Direction</button>
+        </div>
+    </div>
+
+    <div id="map" style="height: 720px; width: 1280px;"></div>
+    
+    <!-- Your script to handle the map -->
+    <script src="map.js"></script>
+</body>
+</html>
