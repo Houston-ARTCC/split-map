@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interactive Leaflet Map</title>
+  <!-- Load Leaflet from CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Load jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Load GeoJSON library -->
+  <script src="https://unpkg.com/leaflet-ajax/dist/leaflet.ajax.min.js"></script>
+  <style>
+    #map {
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+  // Initialize Leaflet map
+  var map = L.map('map').setView([29.7604, -95.3698], 10); // Centered on Houston, TX
+
+  // Add OpenStreetMap tiles as base layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Create random polygons
+  var polygons = [];
+  for (var i = 0; i < 5; i++) {
+    var latlngs = [];
+    for (var j = 0; j < 6; j++) {
+      var lat = 29.7 + Math.random() * 0.5; // Random latitude within Houston area
+      var lng = -95.5 + Math.random() * 0.5; // Random longitude within Houston area
+      latlngs.push([lat, lng]);
+    }
+    polygons.push({
+      "type": "Feature",
+      "properties": {
+        "name": "Polygon " + (i + 1),
+        "description": "This is polygon " + (i + 1),
+        "split": "Split " + (i % 5 + 1) // Assigning a split value
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [latlngs]
+      }
+    });
+  }
+
+  // Add GeoJSON layer
+  L.geoJSON(polygons, {
+    style: function(feature) {
+      return {
+        fillColor: getColor(feature.properties.split),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+      };
+    },
+    onEachFeature: function(feature, layer) {
+      // Bind popup
+      layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.description);
+
+      // Add click event
+      layer.on('click', function(e) {
+        var newSplit = prompt("Choose a split (Split 1 to Split 5):");
+        if (newSplit) {
+          e.target.feature.properties.split = newSplit;
+          layer.setStyle({ fillColor: getColor(newSplit) });
+        }
+      });
+    }
+  }).addTo(map);
+
+  // Define color based on split
+  function getColor(split) {
+    switch (split) {
+      case 'Split 1': return 'red';
+      case 'Split 2': return 'blue';
+      case 'Split 3': return 'green';
+      case 'Split 4': return 'orange';
+      case 'Split 5': return 'purple';
+      default: return 'gray';
+    }
+  }
+</script>
+
+</body>
+</html>
