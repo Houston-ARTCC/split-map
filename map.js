@@ -1,5 +1,13 @@
 // Initialize Leaflet map centered over Houston, TX
-var map = L.map('map', {zoomControl: false }).setView([28.058186402080953, -93.68194006067763], 6);
+var map = L.map('map', {
+    zoomControl: false,
+    scrollWheelZoom: false,
+    closePopupOnClick: false,
+    doubleClickZoom: false,
+    dragging: false,
+    boxZoom: false,
+    keyboard: false
+    }).setView([28.058186402080953, -93.68194006067763], 6);
 
 // Add a tile layer (e.g., OpenStreetMap)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -57,6 +65,8 @@ var geojsonData = {
 var currentStrata = "low";
 var geojsonLayer = L.geoJSON(geojsonData, {
     style: {
+        interactive: false,
+        bubblingMouseEvents: false,
         color: '#000000',  // Outline color
         weight: 1,         // Outline weight
         fillColor: 'gray', // Fill color
@@ -75,6 +85,8 @@ function toggleStrata() {
     currentStrata = (currentStrata === "low") ? "high" : "low";
     geojsonLayer = L.geoJSON(geojsonData, {
         style: {
+            interactive: false,
+            bubblingMouseEvents: false,
             color: '#000000',  // Outline color
             weight: 1,         // Outline weight
             fillColor: 'gray', // Fill color
@@ -98,32 +110,32 @@ document.getElementById('toggleStrata').addEventListener('click', toggleStrata);
 
 // Define tooltips and markers separately
 var tooltips = {
-    AUSS: L.tooltip({ direction: "center", className: "AUSS" }).setContent("83"),
-    LFKS: L.tooltip({ direction: "center", className: "LFKS" }).setContent("38"),
-    CRPS: L.tooltip({ direction: "center", className: "CRPS" }).setContent("87"),
-    LCHS: L.tooltip({ direction: "center", className: "LCHS" }).setContent("43"),
-    NEWS: L.tooltip({ direction: "center", className: "NEWS" }).setContent("27"),
-    OCNS: L.tooltip({ direction: "center", className: "OCNS" }).setContent("53"),
-    RSGS: L.tooltip({ direction: "center", className: "RSGS" }).setContent("50"),
-    WEST: L.tooltip({ direction: "center", className: "WEST" }).setContent("83"),
-    NORTH: L.tooltip({ direction: "center", className: "NORTH" }).setContent("38"),
-    SOUTH: L.tooltip({ direction: "center", className: "SOUTH" }).setContent("87"),
-    EAST: L.tooltip({ direction: "center", className: "EAST" }).setContent("43")
+    AUSS: L.tooltip({ direction: "center", className: "AUSS", interactive: false }).setContent("83"),
+    LFKS: L.tooltip({ direction: "center", className: "LFKS", interactive: false }).setContent("38"),
+    CRPS: L.tooltip({ direction: "center", className: "CRPS", interactive: false }).setContent("87"),
+    LCHS: L.tooltip({ direction: "center", className: "LCHS", interactive: false }).setContent("43"),
+    NEWS: L.tooltip({ direction: "center", className: "NEWS", interactive: false }).setContent("27"),
+    OCNS: L.tooltip({ direction: "center", className: "OCNS", interactive: false }).setContent("53"),
+    RSGS: L.tooltip({ direction: "center", className: "RSGS", interactive: false }).setContent("50"),
+    WEST: L.tooltip({ direction: "center", className: "WEST", interactive: false }).setContent("83"),
+    NORTH: L.tooltip({ direction: "center", className: "NORTH", interactive: false }).setContent("38"),
+    SOUTH: L.tooltip({ direction: "center", className: "SOUTH", interactive: false }).setContent("87"),
+    EAST: L.tooltip({ direction: "center", className: "EAST", interactive: false }).setContent("43")
 };
 
 // Create markers and bind tooltips
 var markers = {
-    AUSS: L.marker([30.555, -97.072]),
-    LFKS: L.marker([30.882, -93.664]),
-    CRPS: L.marker([27.982, -97.121]),
-    LCHS: L.marker([29.335, -93.794]),
-    NEWS: L.marker([29.884, -89.389]),
-    OCNS: L.marker([26.289, -90.800]),
-    RSGS: L.marker([30.096, -99.448]),
-    WEST: L.marker([30.423, -98.383]),
-    NORTH: L.marker([30.882, -93.664]),
-    SOUTH: L.marker([28.638, -96.187]),
-    EAST: L.marker([28.212, -89.634])
+    AUSS: L.marker([30.555, -97.072], { interactive: false }),
+    LFKS: L.marker([30.882, -93.664], { interactive: false }),
+    CRPS: L.marker([27.982, -97.121], { interactive: false }),
+    LCHS: L.marker([29.335, -93.794], { interactive: false }),
+    NEWS: L.marker([29.884, -89.389], { interactive: false }),
+    OCNS: L.marker([26.289, -90.800], { interactive: false }),
+    RSGS: L.marker([30.096, -99.448], { interactive: false }),
+    WEST: L.marker([30.423, -98.383], { interactive: false }),
+    NORTH: L.marker([30.882, -93.664], { interactive: false }),
+    SOUTH: L.marker([28.638, -96.187], { interactive: false }),
+    EAST: L.marker([28.212, -89.634], { interactive: false })
 };
 
 // Add markers to the map and bind tooltips
