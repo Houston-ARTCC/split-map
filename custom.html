@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTING: ZHU Enroute Splits</title>
+    <!-- Include Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="style2.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <h1>ZHU Enroute Splits <span style="color: red;">TESTING VERSION</span></h1>
+    <div class="float-container clearfix">
+        <div class="float-child">
+            <p><b>Instructions</b></p>
+            <ol>
+                <li>Press Define Splits.</li>
+                <li>Click on each sector to assign to a split (1-5).</li>
+                <li>When finished coloring the splits, press Create Labels.</li>
+                <li>Click a spot on the map and enter the desired label text.</li>
+                <li>You can toggle back and forth between defining splits and creating labels.</li>
+                <li>Use screenshot tool of your choice to share split map.</li>
+            </ol>
+            <button onclick="startColoring()">Define Splits</button>
+            <button onclick="createLabels()" class="lightblue">Create Labels</button>
+            <button onclick="resetMap()" class="red">Reset Map</button>
+        </div>
+        
+        <div class="float-child">
+            <p><b>Specialty Consolidated</b></p>
+            <table>
+                <tbody>
+                    <tr><td>AUS</td><td>83</td></tr>
+                    <tr><td>CRP</td><td>87</td></tr>
+                    <tr><td>LCH</td><td>43</td></tr>
+                    <tr><td>LFK</td><td>38</td></tr>
+                    <tr><td>NEW</td><td>27</td></tr>
+                    <tr><td>OCN</td><td>53</td></tr>
+                    <tr><td>RSG</td><td>50</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="float-child">
+            <p><b>Specialty TRACON Ownership</b></p>
+            <table>
+                <tbody>
+                    <tr><td>AUS</td><td>AUS, I90</td></tr>
+                    <tr><td>CRP</td><td>CRP, VLY, NQI</td></tr>
+                    <tr><td>LCH</td><td>LCH</td></tr>
+                    <tr><td>LFK</td><td>POE</td></tr>
+                    <tr><td>NEW</td><td>LFT, BTR, MSY, GPT, MOB</td></tr>
+                    <tr><td>RSG</td><td>DLF, SAT</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="map" style="height: 720px; width: 1280px;"></div>
+
+    <p><b>ToDo:</b></p>
+    <ul>
+        <li>Toggle between high and low sectors.</li>
+        <li>Add lines for neighboring ARTCCs/sectors.</li>
+    </ul>
+
+    <script src="map2.js"></script>
+
+</body>
+</html>

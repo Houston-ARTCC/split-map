@@ -1,13 +1,21 @@
 // Initialize Leaflet map centered over Houston, TX
-var map = L.map('map', {
-    zoomControl: false,
-    scrollWheelZoom: false,
-    closePopupOnClick: false,
-    doubleClickZoom: false,
-    dragging: false,
-    boxZoom: false,
-    keyboard: false
-    }).setView([28.058186402080953, -93.68194006067763], 6);
+var map = L.map('map',{
+    zoomControl: false
+}).setView([28.058186402080953, -93.68194006067763], 6);
+
+// Disable map interaction
+map.dragging.disable();
+map.touchZoom.disable();
+map.doubleClickZoom.disable();
+map.scrollWheelZoom.disable();
+map.boxZoom.disable();
+map.keyboard.disable();
+if (map.tap) map.tap.disable();
+
+var coloringEnabled = false;
+var labelingEnabled = false;
+var lowPolygonsLayer;
+var markers = []; // Move markers array declaration outside of any function
 
 // Add a tile layer (e.g., OpenStreetMap)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -61,177 +69,104 @@ var geojsonData = {
     ]
 }
 
-// Initialize the GeoJSON layer with the "low" strata filter
-var currentStrata = "low";
-var geojsonLayer = L.geoJSON(geojsonData, {
-    style: {
-        interactive: false,
-        bubblingMouseEvents: false,
-        color: '#000000',  // Outline color
-        weight: 1,         // Outline weight
-        fillColor: 'gray', // Fill color
-        fillOpacity: 0.85  // Fill opacity
-    },
-    filter: function(feature) {
-        // Filter features based on the "strata" property
-        return feature.properties.strata === currentStrata;
+// Define colors
+var colors = ['tomato', 'slateblue', 'mediumseagreen', 'orange', 'dodgerblue', 'tomato'];
+
+// Define style for the polygons
+var polygonStyle = {
+    fillColor: 'gray',
+    fillOpacity: 1,
+    color: 'black', // Border color
+    weight: 1 // Border weight
+};
+
+// Create the lowPolygonsLayer by default
+lowPolygonsLayer = L.geoJSON(geojsonData, {
+    style: polygonStyle,
+    filter: function(feature, layer) {
+        return feature.properties.strata === "low";
     }
 }).addTo(map);
 
-// Function to toggle between "high" and "low" strata polygons
-function toggleStrata() {
-    resetMarkers();
-    map.removeLayer(geojsonLayer);
-    currentStrata = (currentStrata === "low") ? "high" : "low";
-    geojsonLayer = L.geoJSON(geojsonData, {
-        style: {
-            interactive: false,
-            bubblingMouseEvents: false,
-            color: '#000000',  // Outline color
-            weight: 1,         // Outline weight
-            fillColor: 'gray', // Fill color
-            fillOpacity: 0.85  // Fill opacity
-        },
-        filter: function(feature) {
-            // Filter features based on the "strata" property
-            return feature.properties.strata === currentStrata;
+// Function to color polygons
+function startColoring() {
+    if (!coloringEnabled) {
+        // Reset labeling mode
+        labelingEnabled = false;
+
+        // Remove click event listener for creating labels
+        map.off('click');
+
+        // Add click event to the filtered GeoJSON layer to color polygons
+        lowPolygonsLayer.eachLayer(function(layer) {
+            layer.on('click', function(e) {
+                var colorIndex = prompt("Enter color index (1-5):");
+                if (colorIndex !== null && colorIndex >= 1 && colorIndex <= 5) {
+                    colorPolygons(layer, colorIndex);
+                } else {
+                    alert("Invalid color index. Please enter a number between 1 and 5.");
+                }
+            });
+        });
+
+        coloringEnabled = true;
+    }
+}
+
+// Function to color polygons
+function colorPolygons(layer, colorIndex) {
+    layer.setStyle({
+        fillColor: colors[colorIndex],
+        fillOpacity: 1
+    });
+}
+
+// Function to create labels
+function createLabels() {
+    if (!labelingEnabled) {
+        // Reset coloring mode
+        coloringEnabled = false;
+
+        // Remove click event listener for coloring polygons
+        lowPolygonsLayer.eachLayer(function(layer) {
+            layer.off('click');
+        });
+
+        map.on('click', function(e) {
+            var text = prompt("Enter tooltip label/text:");
+            if (text !== null && text !== "") {
+                var marker = L.marker(e.latlng, { opacity: 0 }).addTo(map);
+                marker.bindTooltip(text, { permanent: true, direction: 'center', offset: [-10, 30] }).openTooltip();
+                markers.push(marker);
+            }
+        });
+
+        labelingEnabled = true;
+    }
+}
+
+// Function to reset the map
+function resetMap() {
+    // Remove all markers
+    markers.forEach(function(marker) {
+        map.removeLayer(marker);
+    });
+    markers = [];
+
+    // Reset coloring and labeling flags
+    coloringEnabled = false;
+    labelingEnabled = false;
+
+    // Remove GeoJSON layer
+    if (lowPolygonsLayer) {
+        map.removeLayer(lowPolygonsLayer);
+    }
+
+    // Re-create the lowPolygonsLayer
+    lowPolygonsLayer = L.geoJSON(geojsonData, {
+        style: polygonStyle,
+        filter: function(feature, layer) {
+            return feature.properties.strata === "low";
         }
     }).addTo(map);
-
-    // Update the button text
-    document.getElementById('toggleStrata').innerText = (currentStrata === "low") ? "Show High" : "Show Low";
 }
-
-// Set the initial button text
-document.getElementById('toggleStrata').innerText = "Show High";
-
-// Event listener for the toggleStrata button
-document.getElementById('toggleStrata').addEventListener('click', toggleStrata);
-
-// Define tooltips and markers separately
-var tooltips = {
-    AUSS: L.tooltip({ direction: "center", className: "AUSS", interactive: false }).setContent("83"),
-    LFKS: L.tooltip({ direction: "center", className: "LFKS", interactive: false }).setContent("38"),
-    CRPS: L.tooltip({ direction: "center", className: "CRPS", interactive: false }).setContent("87"),
-    LCHS: L.tooltip({ direction: "center", className: "LCHS", interactive: false }).setContent("43"),
-    NEWS: L.tooltip({ direction: "center", className: "NEWS", interactive: false }).setContent("27"),
-    OCNS: L.tooltip({ direction: "center", className: "OCNS", interactive: false }).setContent("53"),
-    RSGS: L.tooltip({ direction: "center", className: "RSGS", interactive: false }).setContent("50"),
-    WEST: L.tooltip({ direction: "center", className: "WEST", interactive: false }).setContent("83"),
-    NORTH: L.tooltip({ direction: "center", className: "NORTH", interactive: false }).setContent("38"),
-    SOUTH: L.tooltip({ direction: "center", className: "SOUTH", interactive: false }).setContent("87"),
-    EAST: L.tooltip({ direction: "center", className: "EAST", interactive: false }).setContent("43")
-};
-
-// Create markers and bind tooltips
-var markers = {
-    AUSS: L.marker([30.555, -97.072], { interactive: false }),
-    LFKS: L.marker([30.882, -93.664], { interactive: false }),
-    CRPS: L.marker([27.982, -97.121], { interactive: false }),
-    LCHS: L.marker([29.335, -93.794], { interactive: false }),
-    NEWS: L.marker([29.884, -89.389], { interactive: false }),
-    OCNS: L.marker([26.289, -90.800], { interactive: false }),
-    RSGS: L.marker([30.096, -99.448], { interactive: false }),
-    WEST: L.marker([30.423, -98.383], { interactive: false }),
-    NORTH: L.marker([30.882, -93.664], { interactive: false }),
-    SOUTH: L.marker([28.638, -96.187], { interactive: false }),
-    EAST: L.marker([28.212, -89.634], { interactive: false })
-};
-
-// Add markers to the map and bind tooltips
-Object.keys(markers).forEach(function(key) {
-    var marker = markers[key];
-    marker.addTo(map);
-    markers[key].setOpacity(0);
-    tooltips[key].setLatLng(marker.getLatLng()).addTo(map);
-    tooltips[key].setOpacity(0); // Set tooltip opacity to zero
-});
-
-// Function to show/hide markers based on button click
-function showMarkers(markerKeys) {
-    // Hide all markers and tooltips
-    Object.keys(markers).forEach(function(key) {
-        markers[key].setOpacity(0);
-        tooltips[key].setOpacity(0);
-    });
-
-    // Show selected markers and tooltips
-    markerKeys.forEach(function(key) {
-        markers[key].setOpacity(0);
-        tooltips[key].setOpacity(1);
-    });
-}
-
-// Reset function to hide all markers
-function resetMarkers() {
-    Object.keys(markers).forEach(function(key) {
-        markers[key].setOpacity(0);
-        tooltips[key].setOpacity(0);
-    });
-}
-
-// Event listener for the toggleStrata button
-document.getElementById('toggleStrata').addEventListener('click', toggleStrata);
-
-// Event handler for "Split by Specialty" button
-document.getElementById('splitBySpecialty').addEventListener('click', function() {
-    geojsonLayer.setStyle(function(feature) {
-        var category = feature.properties.category;
-        if (category === "AUS") {
-            return { fillColor: '#F09EA7', fillOpacity: 0.85 };
-        } else if (category === "CRP") {
-            return { fillColor: '#F6CA94', fillOpacity: 0.85 };
-        } else if (category === "LCH") {
-            return { fillColor: '#C1EBC0', fillOpacity: 0.85 };
-        } else if (category === "LFK") {
-            return { fillColor: '#CDABEB', fillOpacity: 0.85 };
-        } else if (category === "NEW") {
-            return { fillColor: '#FAFABE', fillOpacity: 0.85 };
-        } else if (category === "OCN") {
-            return { fillColor: '#C7CAFF', fillOpacity: 0.85 };
-        } else if (category === "RSG") {
-            return { fillColor: '#F6C2F3', fillOpacity: 0.85 };
-        } else {
-            return { fillColor: 'gray', fillOpacity: 0.85 };
-        }
-    });
-    var markersToShow = ['AUSS', 'LFKS', 'CRPS', 'LCHS', 'NEWS', 'OCNS', 'RSGS']; // Show specialty markers when split by specialties
-    showMarkers(markersToShow);
-});
-
-// Event handler for "Split by Direction" button
-document.getElementById('splitByDirection').addEventListener('click', function() {
-    geojsonLayer.setStyle(function(feature) {
-        var direction = feature.properties.direction;
-        switch (direction) {
-            case 'N':
-                return { fillColor: '#CDABEB', fillOpacity: 0.85 };
-            case 'S':
-                return { fillColor: '#C1EBC0', fillOpacity: 0.85 };
-            case 'E':
-                return { fillColor: '#FAFABE', fillOpacity: 0.85 };
-            case 'W':
-                return { fillColor: '#F09EA7', fillOpacity: 0.85 };
-            default:
-                return { fillColor: 'gray', fillOpacity: 0.85 };
-        }
-    });
-    var markersToShow = ['NORTH', 'SOUTH', 'EAST', 'WEST']; // Show specialty markers when split by direction
-    showMarkers(markersToShow);
-});
-
-// Function to reset GeoJSON layer style and hide markers
-function resetMap() {
-    geojsonLayer.setStyle(function(feature) {
-        var category = feature.properties.category;
-        if (category === "###") {
-            return { color: '#000000', weight: '1', fillColor: '#F09EA7', fillOpacity: 0.85 };
-        } else {
-            return { color: '#000000', weight: '1', fillColor: 'gray', fillOpacity: 0.85 };
-        }
-    });
-    resetMarkers(); // Call function to hide all markers
-}
-
-// Event handler for "Reset Map" button
-document.getElementById('resetBtn').addEventListener('click', resetMap);
