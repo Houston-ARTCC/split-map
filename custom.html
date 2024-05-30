@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTING: ZHU Enroute Splits</title>
+    <title>ZHU Custom Enroute Splits</title>
     <!-- Include Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style2.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <h1>ZHU Enroute Splits <span style="color: red;">TESTING VERSION</span></h1>
+    <h1>ZHU Custom Enroute Splits</h1>
+    <p><a href="index.html"><button class="red">Back to Menu</button></a></p>
     <div class="float-container clearfix">
         <div class="float-child">
             <p><b>Instructions</b></p>
             <ol>
-                <li>Press Define Splits.</li>
+                <li>Press Define Splits</li>
                 <li>Click on each sector to assign to a split (1-5).</li>
                 <li>When finished coloring the splits, press Create Labels.</li>
                 <li>Click a spot on the map and enter the desired label text.</li>
@@ -23,8 +24,8 @@
                 <li>Use screenshot tool of your choice to share split map.</li>
             </ol>
             <button onclick="startColoring()">Define Splits</button>
-            <button onclick="createLabels()" class="lightblue">Create Labels</button>
-            <button onclick="resetMap()" class="red">Reset Map</button>
+            <button onclick="createLabels()" class="blue">Create Labels</button>
+            <button onclick="resetMap()" class="red">Reset</button>
         </div>
         
         <div class="float-child">
@@ -41,6 +42,7 @@
                 </tbody>
             </table>
         </div>
+
         <div class="float-child">
             <p><b>Specialty TRACON Ownership</b></p>
             <table>
@@ -56,15 +58,19 @@
         </div>
     </div>
 
-    <div id="map" style="height: 720px; width: 1280px;"></div>
+    <div id="map" style="width: 1280px; height: 720px;"></div>
 
-    <p><b>ToDo:</b></p>
-    <ul>
-        <li>Toggle between high and low sectors.</li>
-        <li>Add lines for neighboring ARTCCs/sectors.</li>
-    </ul>
-
+    <div class="float-child">
+        <p><b>ToDo</b></p>
+        <ul>
+            <li>Toggle between high and low sectors.</li>
+            <li><span style="color: green;">Done 05/29/24 - Add lines for neighboring ARTCCs/FIRs.</span></li>
+        </ul>
+    </div>
+    
     <script src="map2.js"></script>
+
+    <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
 
 </body>
 </html>

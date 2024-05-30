@@ -3,19 +3,30 @@
 body {
 	font-family: 'Open Sans', sans-serif;
 	line-height: 1.75em;
-	font-size: 16px;
+	font-size: 14px;
 	background-color: #222;
 	color: #cccccc;
 }
 
+.float-container {
+	display: flex;
+	align-items: stretch;
+	margin-bottom: 20px;
+	width: 1280px
+}
+
 .float-child {
 	float: left;
-	margin-right: 20px;
-	margin-bottom: 10px;
-	background-color: #25337b;
-	color: white;
-	padding: 15px;
+	margin-right: 10px;
+	padding: 10px;
 	border-radius: 20px;
+	background-color: #333333;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 button {
@@ -23,8 +34,10 @@ button {
 	font-weight: bold;
 	background-color: #b88728;
 	color: white;
-	padding: 7px 10px 7px 10px;
-	width: 125px;
+	padding: 10px;
+	margin-right: 5px;
+	width: 150px;
+	border: 0px;
 	border-radius: 20px;
 }
 
@@ -35,6 +48,17 @@ button {
 .red {
 	background-color: #a02f21;
 }
+
+.blue {
+	background-color: #30429c;
+}
+
+#map {
+	padding: 10px;
+	border: 8px solid gray;
+	margin-bottom: 20px;
+}
+
 
 .leaflet-tooltip {
     background-color: white;

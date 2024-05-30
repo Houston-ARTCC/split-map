@@ -3,28 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZHU Enroute Splits</title>
+    <title>ZHU Enroute Split Generator</title>
     <!-- Include Leaflet CSS and JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
+
 <body>
-    <div class="controls">
+    <h1>ZHU Enroute Split Generator</h1>
+    <div class="float-container clearfix">
         <div class="float-child">
-            Map Controls:<br />
-            <button id="toggleStrata" class="button">Toggle Strata</button>
-            <button id="resetBtn" class="red">Reset</button>
+            <p><img src="images/logo.png"></p>
         </div>
         <div class="float-child">
-            Split by:<br />
-            <button id="splitBySpecialty" class="lightblue">Specialty</button>
-            <button id="splitByDirection" class="lightblue">N/S/E/W</button>
+            <p><a href="custom.html"><button>Custom</button></a> For customized splits. Can create up to 5 splits.</p>
+            <p><a href="standard.html"><button class="blue">Standard</button></a> For standard splits by specialty or cardinal direction per Enroute SOP.</p>
         </div>
     </div>
-
-    <div id="map" style="height: 720px; width: 1280px;"></div>
-
-    <script src="map.js"></script>
 </body>
-</html>
