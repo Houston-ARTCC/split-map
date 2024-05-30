@@ -69,29 +69,29 @@ button {
 }
 
 .leaflet-tooltip.AUSS, .WEST {
-    background-color: #F09EA7;
+    background-color: tomato;
 }
 
 .leaflet-tooltip.LFKS, .NORTH {
-    background-color: #CDABEB;
+    background-color: dodgerblue;
 }
 
-.leaflet-tooltip.CRPS {
-    background-color: #F6CA94;
+.leaflet-tooltip.CRPS, .SOUTH {
+    background-color: orange;
 }
 
-.leaflet-tooltip.LCHS, .SOUTH {
-    background-color: #C1EBC0;
+.leaflet-tooltip.LCHS {
+    background-color: mediumseagreen;
 }
 
 .leaflet-tooltip.NEWS, .EAST {
-    background-color: #FAFABE;
+    background-color: khaki;
 }
 
 .leaflet-tooltip.OCNS {
-    background-color: #C7CAFF;
+    background-color: slateblue;
 }
 
 .leaflet-tooltip.RSGS {
-    background-color: #F6C2F3;
+    background-color: lightpink;
 }
