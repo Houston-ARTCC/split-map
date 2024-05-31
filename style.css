@@ -68,30 +68,37 @@ button {
     padding-bottom: 0;
 }
 
-.leaflet-tooltip.AUSS, .WEST {
+.leaflet-tooltip.AUSS, .WEST, .WSPLIT {
     background-color: tomato;
+	border: 3px solid white;
 }
 
-.leaflet-tooltip.LFKS, .NORTH {
+.leaflet-tooltip.LFKS, .NORTH, .ESPLIT {
     background-color: dodgerblue;
+	border: 3px solid white;
 }
 
 .leaflet-tooltip.CRPS, .SOUTH {
     background-color: orange;
+	border: 3px solid white;
 }
 
 .leaflet-tooltip.LCHS {
     background-color: mediumseagreen;
+	border: 3px solid white;
 }
 
 .leaflet-tooltip.NEWS, .EAST {
     background-color: khaki;
+	border: 3px solid white;
 }
 
 .leaflet-tooltip.OCNS {
     background-color: slateblue;
+	border: 3px solid white;
 }
 
 .leaflet-tooltip.RSGS {
     background-color: lightpink;
+	border: 3px solid white;
 }

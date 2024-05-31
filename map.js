@@ -150,7 +150,9 @@ var tooltips = {
     WEST: L.tooltip({ direction: "center", className: "WEST", interactive: false }).setContent("83"),
     NORTH: L.tooltip({ direction: "center", className: "NORTH", interactive: false }).setContent("38"),
     SOUTH: L.tooltip({ direction: "center", className: "SOUTH", interactive: false }).setContent("87"),
-    EAST: L.tooltip({ direction: "center", className: "EAST", interactive: false }).setContent("43")
+    EAST: L.tooltip({ direction: "center", className: "EAST", interactive: false }).setContent("43"),
+    WSPLIT: L.tooltip({ direction: "center", className: "WSPLIT", interactive: false }).setContent("50"),
+    ESPLIT: L.tooltip({ direction: "center", className: "ESPLIT", interactive: false }).setContent("81")
 };
 
 // Create markers and bind tooltips
@@ -165,7 +167,9 @@ var markers = {
     WEST: L.marker([30.423, -98.383], { interactive: false }),
     NORTH: L.marker([30.882, -93.664], { interactive: false }),
     SOUTH: L.marker([28.638, -96.187], { interactive: false }),
-    EAST: L.marker([28.212, -89.634], { interactive: false })
+    EAST: L.marker([28.212, -89.634], { interactive: false }),
+    WSPLIT: L.marker([29.423, -98.383], { interactive: false }),
+    ESPLIT: L.marker([29.212, -91.634], { interactive: false })
 };
 
 // Add markers to the map and bind tooltips
@@ -247,6 +251,32 @@ document.getElementById('splitByDirection').addEventListener('click', function()
         }
     });
     var markersToShow = ['NORTH', 'SOUTH', 'EAST', 'WEST']; // Show specialty markers when split by direction
+    showMarkers(markersToShow);
+});
+
+// Event handler for "Split by E/W" button
+document.getElementById('splitByEW').addEventListener('click', function() {
+    geojsonLayer.setStyle(function(feature) {
+        var category = feature.properties.category;
+        if (category === "AUS") {
+            return { fillColor: '#ff6347', fillOpacity: 1 };
+        } else if (category === "CRP") {
+            return { fillColor: '#ff6347', fillOpacity: 1 };
+        } else if (category === "LCH") {
+            return { fillColor: '#1e90ff', fillOpacity: 1 };
+        } else if (category === "LFK") {
+            return { fillColor: '#1e90ff', fillOpacity: 1 };
+        } else if (category === "NEW") {
+            return { fillColor: '#1e90ff', fillOpacity: 1 };
+        } else if (category === "OCN") {
+            return { fillColor: '#1e90ff', fillOpacity: 1 };
+        } else if (category === "RSG") {
+            return { fillColor: '#ff6347', fillOpacity: 1 };
+        } else {
+            return { fillColor: 'gray', fillOpacity: 1 };
+        }
+    });
+    var markersToShow = ['ESPLIT', 'WSPLIT']; // Show specialty markers when split by specialties
     showMarkers(markersToShow);
 });
 
