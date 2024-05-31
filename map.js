@@ -285,9 +285,9 @@ function resetMap() {
     geojsonLayer.setStyle(function(feature) {
         var category = feature.properties.category;
         if (category === "###") {
-            return { color: '#000000', weight: '1', fillColor: '#F09EA7', fillOpacity: 1 };
+            return { color: '#000000', weight: '1', fillColor: '#555', fillOpacity: 1 };
         } else {
-            return { color: '#000000', weight: '1', fillColor: 'gray', fillOpacity: 1 };
+            return { color: '#000000', weight: '1', fillColor: '#555', fillOpacity: 1 };
         }
     });
     resetMarkers(); // Call function to hide all markers
