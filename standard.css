@@ -68,37 +68,50 @@ button {
     padding-bottom: 0;
 }
 
-.leaflet-tooltip.AUSS, .WEST, .WSPLIT {
-    background-color: tomato;
-	border: 3px solid white;
+.color1 {
+	background-color: #264653;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.LFKS, .NORTH, .ESPLIT {
-    background-color: dodgerblue;
-	border: 3px solid white;
+.color2 {
+	background-color: #287271;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.CRPS, .SOUTH {
-    background-color: orange;
-	border: 3px solid white;
+.color3 {
+	background-color: #2A9D8F;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.LCHS {
-    background-color: mediumseagreen;
-	border: 3px solid white;
+.color4 {
+	background-color: #8AB17D;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.NEWS, .EAST {
-    background-color: khaki;
-	border: 3px solid white;
+.color5 {
+	background-color: #C6A75A;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.OCNS {
-    background-color: slateblue;
-	border: 3px solid white;
+.color6 {
+	background-color: #F4A261;
+	color: #fff;
+	border: 2px solid #fff;
 }
 
-.leaflet-tooltip.RSGS {
-    background-color: lightpink;
-	border: 3px solid white;
+.color7 {
+	background-color: #E76F51;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.colorDefult {
+	background-color: gray;
+	color: #fff;
+	border: 2px solid #fff;
 }

@@ -33,6 +33,16 @@ var imageBounds = [southWest, northEast];
 // Add the image overlay to the map
 L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
+// Define various colors used on map
+var color1 = '#264653';
+var color2 = '#287271';
+var color3 = '#2A9D8F';
+var color4 = '#8AB17D';
+var color5 = '#C6A75A';
+var color6 = '#F4A261';
+var color7 = '#E76F51';
+var colorDefault = 'gray';
+
 var coloringEnabled = false;
 var labelingEnabled = false;
 var lowPolygonsLayer;
@@ -100,7 +110,7 @@ var geojsonData = {
 }
 
 // Define colors
-var colors = ['tomato', 'slateblue', 'mediumseagreen', 'orange', 'dodgerblue', 'tomato'];
+var colors = ['#C6A75A', '#264653', '#2A9D8F', '#C6A75A', '#E76F51', '#F4A261'];
 
 // Define style for low polygons
 var lowPolygonStyle = {

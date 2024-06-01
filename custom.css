@@ -91,3 +91,51 @@ td {
 	border-radius: 20px;
 	background-color: #333333;
 }
+
+.color1 {
+	background-color: #264653;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color2 {
+	background-color: #287271;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color3 {
+	background-color: #2A9D8F;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color4 {
+	background-color: #8AB17D;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color5 {
+	background-color: #C6A75A;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color6 {
+	background-color: #F4A261;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.color7 {
+	background-color: #E76F51;
+	color: #fff;
+	border: 2px solid #fff;
+}
+
+.colorDefult {
+	background-color: gray;
+	color: #fff;
+	border: 2px solid #fff;
+}
