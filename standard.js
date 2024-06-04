@@ -247,7 +247,7 @@
         NEWS: L.tooltip({ direction: "center", className: "color4", interactive: false }).setContent("27"),
         OCNS: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("53"),
         RSGS: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("50"),
-        WEST: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("83"),
+        WEST: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("50"),
         NORTH: L.tooltip({ direction: "center", className: "color3", interactive: false }).setContent("38"),
         SOUTH: L.tooltip({ direction: "center", className: "color7", interactive: false }).setContent("87"),
         EAST: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("43"),
@@ -257,19 +257,19 @@
 
 // Create markers and bind tooltips
     var markers = {
-        AUSS: L.marker([30.555, -97.072], { interactive: false }),
-        CRPS: L.marker([27.982, -97.121], { interactive: false }),
-        LCHS: L.marker([29.335, -93.794], { interactive: false }),
-        LFKS: L.marker([30.882, -93.664], { interactive: false }),
-        NEWS: L.marker([29.884, -89.389], { interactive: false }),
+        AUSS: L.marker([30.555, -96.472], { interactive: false }),
+        CRPS: L.marker([28.782, -96.491], { interactive: false }),
+        LCHS: L.marker([28.935, -93.794], { interactive: false }),
+        LFKS: L.marker([31.182, -92.864], { interactive: false }),
+        NEWS: L.marker([29.184, -88.889], { interactive: false }),
         OCNS: L.marker([26.289, -90.800], { interactive: false }),
-        RSGS: L.marker([30.096, -99.448], { interactive: false }),
-        WEST: L.marker([30.423, -98.383], { interactive: false }),
-        NORTH: L.marker([30.882, -93.664], { interactive: false }),
+        RSGS: L.marker([30.696, -99.248], { interactive: false }),
+        WEST: L.marker([30.696, -99.248], { interactive: false }),
+        NORTH: L.marker([31.182, -92.864], { interactive: false }),
         SOUTH: L.marker([28.638, -96.187], { interactive: false }),
         EAST: L.marker([28.212, -89.634], { interactive: false }),
-        WSPLIT: L.marker([29.423, -98.383], { interactive: false }),
-        ESPLIT: L.marker([29.212, -91.634], { interactive: false })
+        WSPLIT: L.marker([30.696, -99.248], { interactive: false }),
+        ESPLIT: L.marker([28.812, -91.634], { interactive: false })
     };
 
 // Add markers to the map and bind tooltips
