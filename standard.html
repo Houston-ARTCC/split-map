@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="standard.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 </head>
 <body>
     
@@ -20,11 +21,14 @@
             <p><b>Map Controls</b></p>
             <button id="toggleStrata" class="button">Show High Strata</button>
             <button id="toggleTracon" class="button">Show TRACONs</button>
+            <p>
             <button id="resetMap" class="red">Reset</button>
+            <button id="exportMap" class="blue">Export Map</button>
         </div>
         <div class="float-child" style="text-align: center;">
             <p><b>Standard Splits</b></p>
             <button id="splitBySpecialty" class="blue">Specialty</button>
+            <p>
             <button id="splitByDirection" class="blue">N/S/E/W</button>
             <button id="splitByEW" class="blue">E/W</button>
         </div>

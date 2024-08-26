@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="custom.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 </head>
 <body>
     <div class="float-container clearfix">
@@ -23,11 +24,12 @@
                 <li>When finished coloring the splits, press Create Labels.</li>
                 <li>Click a spot on the map and enter the desired label text.</li>
                 <li>You can toggle back and forth between defining splits and creating labels.</li>
-                <li>Use screenshot tool of your choice to share split map.</li>
             </ol>
             <button onclick="startColoring()">Define Splits</button>
             <button onclick="createLabels()" class="blue">Create Labels</button>
+            <p>
             <button onclick="resetMap()" class="red">Reset</button>
+            <button id="exportMap" class="blue">Export Map</button>
         </div>
         
         <div class="float-child" style="text-align: center;">

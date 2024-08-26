@@ -53,13 +53,6 @@ button {
 	background-color: #30429c;
 }
 
-#map {
-	padding: 10px;
-	border: 8px solid gray;
-	margin-bottom: 20px;
-}
-
-
 .leaflet-tooltip {
     background-color: white;
     font-size: x-large;

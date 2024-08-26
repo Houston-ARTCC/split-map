@@ -13,28 +13,29 @@
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         maxZoom: 19,
+        crossOrigin: true
     }).addTo(map);
 
-// Define the URL of the image to overlay
-    var imageUrl = 'images/logo.png';
+// // Define the URL of the image to overlay
+//     var imageUrl = 'images/logo.png';
 
-// Define the image dimensions in pixels
-    var imageWidth = 175;
-    var imageHeight = 89;
+// // Define the image dimensions in pixels
+//     var imageWidth = 175;
+//     var imageHeight = 89;
 
-// Define the offset in pixels
-    var offsetX = 20;
-    var offsetY = 20;
+// // Define the offset in pixels
+//     var offsetX = 20;
+//     var offsetY = 20;
 
-// Convert the image dimensions and offset to geographical bounds
-    var southWest = map.containerPointToLatLng([offsetX, map.getSize().y - imageHeight - offsetY]);
-    var northEast = map.containerPointToLatLng([imageWidth + offsetX, map.getSize().y - offsetY]);
+// // Convert the image dimensions and offset to geographical bounds
+//     var southWest = map.containerPointToLatLng([offsetX, map.getSize().y - imageHeight - offsetY]);
+//     var northEast = map.containerPointToLatLng([imageWidth + offsetX, map.getSize().y - offsetY]);
 
-// Create the image bounds
-    var imageBounds = [southWest, northEast];
+// // Create the image bounds
+//     var imageBounds = [southWest, northEast];
 
-// Add the image overlay to the map
-    L.imageOverlay(imageUrl, imageBounds).addTo(map);
+// // Add the image overlay to the map
+//     L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
 // Define various colors used on map
     var color1 = '#264653';
@@ -421,3 +422,65 @@
 
 // Event listener for the reset button
     document.getElementById('resetMap').addEventListener('click', resetMap);
+
+// Event listener for the export map button
+    document.getElementById('exportMap').addEventListener('click', function() {
+        const mapElement = document.getElementById('map'); // The ID of your map container
+
+        // Set the width and height to match the visible map area
+        mapElement.style.width = mapElement.clientWidth + 'px';
+        mapElement.style.height = mapElement.clientHeight + 'px';
+        mapElement.style.padding = '0';  // Ensure no padding
+        mapElement.style.margin = '0';   // Ensure no margin
+
+        domtoimage.toPng(mapElement, {
+            width: mapElement.clientWidth,
+            height: mapElement.clientHeight,
+            style: {
+                margin: 0,  // Remove any external margin
+                padding: 0  // Remove any external padding
+            }
+        })
+        .then(function (dataUrl) {
+            // The dataUrl is your image in Base64 format
+            const imageData = dataUrl.split(',')[1]; // Remove data URL prefix
+
+            // Imgur API Client ID
+            const clientId = '480ac6d8748a9fd'; // Replace with your Imgur Client ID
+
+            // Prepare the data for Imgur
+            const formData = new FormData();
+            formData.append('image', imageData);
+
+            // Upload the image to Imgur
+            fetch('https://api.imgur.com/3/image', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Client-ID ' + clientId,
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const imgurUrl = data.data.link;
+                    alert('Image uploaded successfully! URL has been copied to your clipboard: ' + imgurUrl);
+                    
+                    // Copy the URL to the clipboard
+                    navigator.clipboard.writeText(imgurUrl).then(function() {
+                        console.log('Image URL copied to clipboard successfully!');
+                    }, function(err) {
+                        console.error('Could not copy text to clipboard: ', err);
+                    });
+                } else {
+                    alert('Image upload failed: ' + data.data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
+        })
+        .catch(function (error) {
+            console.error('Error capturing image:', error);
+        });
+    });
