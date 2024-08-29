@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZHU VATSIM Scrapper</title>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.75em;
+            background-color: #222;
+            color: #fff;
+        }
+
+        thead {
+            background-color: #af2512;
+            color: white;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        thead th {
+            border: 1px solid #18181b;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        tbody td {
+            padding: 5px;
+            border: 1px solid #18181b;
+            vertical-align: top;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #333;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #666;
+        }
+
+        .highlight-departure {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .highlight-arrival {
+            background-color: darkred;
+            color: white;
+        }
+
+        button {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+            background-color: #b88728;
+            color: white;
+            padding: 10px;
+            margin-right: 5px;
+            width: 150px;
+            border: 0px;
+            border-radius: 20px;
+        }
+
+        .lightblue {
+            background-color: #1e8ad6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ZHU VATSIM Flight Scrapper</h1>
+    <p>Refresh the page to update flights. Click on a column to sort.</p>
+
+    <table id="aircraftTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Callsign</th>
+                <th onclick="sortTable(1)">Rules</th>
+                <th onclick="sortTable(2)">Equip</th>
+                <th onclick="sortTable(3)">DEP</th>
+                <th onclick="sortTable(4)">ARR</th>
+                <th onclick="sortTable(5)">Cruise</th>
+                <th onclick="sortTable(6)">Alt</th>
+                <th onclick="sortTable(7)">Route</th>
+                <th onclick="sortTable(8)">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table rows will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        const airportCodes = ["KAEX", "KARA", "KAUS", "KBAZ", "KBFM", "KBIX", "KBPT", "KBRO", "KBTR", "KCLL", "KCRP", "KCWF", "KCXO", "KDLF", "KDWH", "KEDC", "KEFD", "KGLS", "KGPT", "KGTU", "KHDC", "KHOU", "KHRL", "KHSA", "KHUM", "KHYI", "KIAH", "KLCH", "KLFT", "KLRD", "KMFE", "KMOB", "KMSY", "KNBG", "KNEW", "KNGP", "KNGW", "KNOG", "KNQI", "KNWL", "KPOE", "KPQL", "KRND", "KSAT", "KSGR", "KSKF", "KSSF", "KTME", "KVCT"];
+        const url = "https://data.vatsim.net/v3/vatsim-data.json";
+        let sortDirection = true; // true for ascending, false for descending
+
+        async function fetchData() {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const aircraftList = data.pilots || [];
+
+                // Filter aircraft based on departure or arrival matching the airport codes
+                const filteredAircraft = aircraftList.filter(aircraft => {
+                    const flightPlan = aircraft.flight_plan;
+                    return flightPlan && (
+                        airportCodes.includes(flightPlan.departure) ||
+                        airportCodes.includes(flightPlan.arrival)
+                    );
+                });
+
+                // Populate the HTML table with filtered data
+                populateTable(filteredAircraft);
+
+                // Initial sort by Callsign (column index 0) in ascending order
+                sortTable(0, true);
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        function populateTable(aircraftData) {
+            const tableBody = document.getElementById("aircraftTable").getElementsByTagName("tbody")[0];
+            tableBody.innerHTML = ""; // Clear existing table rows
+
+            aircraftData.forEach(aircraft => {
+                const flightPlan = aircraft.flight_plan || {};
+                const row = tableBody.insertRow();
+                
+                // Create cells and apply highlighting to DEP and ARR columns if applicable
+                row.insertCell().textContent = aircraft.callsign || "";
+                row.insertCell().textContent = flightPlan.flight_rules || "";
+                row.insertCell().textContent = flightPlan.aircraft_faa || "";
+                
+                const depCell = row.insertCell();
+                depCell.textContent = flightPlan.departure || "";
+                if (airportCodes.includes(flightPlan.departure)) {
+                    depCell.classList.add("highlight-departure");
+                }
+
+                const arrCell = row.insertCell();
+                arrCell.textContent = flightPlan.arrival || "";
+                if (airportCodes.includes(flightPlan.arrival)) {
+                    arrCell.classList.add("highlight-arrival");
+                }
+
+                row.insertCell().textContent = flightPlan.cruise_tas || "";
+                row.insertCell().textContent = flightPlan.altitude || "";
+                row.insertCell().textContent = flightPlan.route || "";
+                row.insertCell().textContent = flightPlan.remarks || "";
+            });
+        }
+
+        function sortTable(columnIndex, initialSort = false) {
+            const tableBody = document.getElementById("aircraftTable").getElementsByTagName("tbody")[0];
+            const rows = Array.from(tableBody.rows);
+
+            rows.sort((a, b) => {
+                const cellA = a.cells[columnIndex].textContent.toLowerCase();
+                const cellB = b.cells[columnIndex].textContent.toLowerCase();
+
+                if (cellA < cellB) {
+                    return (sortDirection || initialSort) ? -1 : 1;
+                }
+                if (cellA > cellB) {
+                    return (sortDirection || initialSort) ? 1 : -1;
+                }
+                return 0;
+            });
+
+            // Toggle sort direction for next click unless it's the initial sort
+            if (!initialSort) {
+                sortDirection = !sortDirection;
+            }
+
+            // Reorder table rows based on the sorted rows
+            rows.forEach(row => tableBody.appendChild(row));
+        }
+
+        // Initial fetch to populate the table on page load
+        fetchData();
+    </script>
+
+</body>
+</html>
