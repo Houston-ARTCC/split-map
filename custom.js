@@ -99,6 +99,14 @@ var lowPolygonStyle = {
     weight: 1 // Border weight
 };
 
+// Define style for high polygons
+var highPolygonStyle = {
+    fillColor: '#555',
+    fillOpacity: 1,
+    color: 'black', // Border color
+    weight: 1 // Border weight
+};
+
 // Define style for neighbor polygons
 var neighborPolygonStyle = {
     fillColor: 'gray',
@@ -109,14 +117,17 @@ var neighborPolygonStyle = {
 
 // Function to determine style based on feature properties
 function polygonStyle(feature) {
-    if (feature.properties.strata === "low") {
-        return lowPolygonStyle;
-    } else if (feature.properties.type === "neighbor") {
-        return neighborPolygonStyle;
+    if (feature.properties.type === "neighbor") {
+        return neighborPolygonStyle;  // Apply neighborPolygonStyle with opacity 0
+    } else if (feature.properties.strata === "low") {
+        return lowPolygonStyle;  // Your existing low strata style
+    } else if (feature.properties.strata === "high") {
+        return highPolygonStyle;  // Your existing high strata style
     }
+    return {};  // Default style if no other conditions match
 }
 
-// Create the lowPolygonsLayer with additional filter condition
+// Create the lowPolygonsLayer with additional filter condition and add it to the map
 lowPolygonsLayer = L.geoJSON(geojsonData, {
     style: polygonStyle,
     filter: function(feature, layer) {
@@ -124,7 +135,61 @@ lowPolygonsLayer = L.geoJSON(geojsonData, {
     }
 }).addTo(map);
 
-// Function to color polygons
+// Create the highPolygonsLayer with filter condition (do not add to map initially)
+highPolygonsLayer = L.geoJSON(geojsonData, {
+    style: polygonStyle,
+    filter: function(feature, layer) {
+        return feature.properties.strata === "high" || feature.properties.type === "neighbor";
+    }
+});
+
+// Define initial state of strata visibility
+isLowStrataVisible = true;  // Assuming low strata is visible by default
+
+// Function to toggle between low and high strata layers
+function toggleStrata() {
+    if (isLowStrataVisible) {
+        map.removeLayer(lowPolygonsLayer);  // Remove low strata layer
+        map.addLayer(highPolygonsLayer);    // Add high strata layer
+        document.getElementById("toggleStrata").innerText = "Show Low";
+    } else {
+        map.removeLayer(highPolygonsLayer); // Remove high strata layer
+        map.addLayer(lowPolygonsLayer);     // Add low strata layer
+        document.getElementById("toggleStrata").innerText = "Show High";
+    }
+    isLowStrataVisible = !isLowStrataVisible;
+}
+
+// Variable to keep track of current mode
+var currentMode = 'coloring'; // Default to coloring mode
+
+// Initialize the map with the default mode (coloring)
+window.onload = function() {
+    if (currentMode === 'coloring') {
+        startColoring();
+        document.getElementById("modeButton").innerText = "Switch to Labeling"; // Update button text
+        document.getElementById("currentModeText").innerText = "Current Mode: Coloring"; // Update helper text
+    }
+};
+
+// Function to toggle between coloring and labeling modes
+function toggleMode() {
+    if (currentMode === 'coloring') {
+        // Switch to labeling mode
+        startLabeling();
+        document.getElementById("modeButton").innerText = "Switch to Coloring"; // Update button text
+        document.getElementById("currentModeText").innerText = "Current Mode: Labeling"; // Update helper text
+        currentMode = 'labeling'; // Update mode
+    } else {
+        // Switch to coloring mode
+        startColoring();
+        document.getElementById("modeButton").innerText = "Switch to Labeling"; // Update button text
+        document.getElementById("currentModeText").innerText = "Current Mode: Coloring"; // Update helper text
+        currentMode = 'coloring'; // Update mode
+    }
+}
+
+// Function to start coloring mode
 function startColoring() {
     if (!coloringEnabled) {
         // Reset labeling mode
@@ -133,8 +198,11 @@ function startColoring() {
         // Remove click event listener for creating labels
         map.off('click');
 
-        // Add click event to the filtered GeoJSON layer to color polygons
-        lowPolygonsLayer.eachLayer(function(layer) {
+        // Determine which layer is currently active (low or high strata)
+        var activeLayer = isLowStrataVisible ? lowPolygonsLayer : highPolygonsLayer;
+
+        // Add click event to the active layer to color polygons
+        activeLayer.eachLayer(function(layer) {
             layer.on('click', function(e) {
                 var colorIndex = prompt("Enter color index (1-5):");
                 if (colorIndex !== null && colorIndex >= 1 && colorIndex <= 5) {
@@ -157,17 +225,24 @@ function colorPolygons(layer, colorIndex) {
     });
 }
 
-// Function to create labels
-function createLabels() {
+// Function to start labeling mode
+function startLabeling() {
     if (!labelingEnabled) {
         // Reset coloring mode
         coloringEnabled = false;
 
         // Remove click event listener for coloring polygons
-        lowPolygonsLayer.eachLayer(function(layer) {
-            layer.off('click');
-        });
+        if (isLowStrataVisible) {
+            lowPolygonsLayer.eachLayer(function(layer) {
+                layer.off('click');
+            });
+        } else {
+            highPolygonsLayer.eachLayer(function(layer) {
+                layer.off('click');
+            });
+        }
 
+        // Add click event for labeling mode
         map.on('click', function(e) {
             var text = prompt("Enter tooltip label/text:");
             if (text !== null && text !== "") {
@@ -181,30 +256,9 @@ function createLabels() {
     }
 }
 
-// Function to reset the map
+// Function to reset map by reloading the page
 function resetMap() {
-    // Remove all markers
-    markers.forEach(function(marker) {
-        map.removeLayer(marker);
-    });
-    markers = [];
-
-    // Reset coloring and labeling flags
-    coloringEnabled = false;
-    labelingEnabled = false;
-
-    // Remove GeoJSON layer
-    if (lowPolygonsLayer) {
-        map.removeLayer(lowPolygonsLayer);
-    }
-
-    // Re-create the lowPolygonsLayer
-    lowPolygonsLayer = L.geoJSON(geojsonData, {
-        style: polygonStyle,
-        filter: function(feature, layer) {
-            return feature.properties.strata === "low" || feature.properties.type === "neighbor";
-        }
-    }).addTo(map);
+    location.reload();  // Reload the page
 }
 
 // Event listener for the export map button

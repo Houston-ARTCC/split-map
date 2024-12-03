@@ -19,17 +19,17 @@
         <div class="float-child">
             <p><b>Instructions</b></p>
             <ol style="font-size: small; line-height: 1.5em;">
-                <li>Press Define Splits</li>
+                <li>Toggle desired sector strata.</li>
                 <li>Click on each sector to assign to a split (1-5).</li>
-                <li>When finished coloring the splits, press Create Labels.</li>
+                <li>When finished coloring the splits, press <b>Switch to Labeling</b>.</li>
                 <li>Click a spot on the map and enter the desired label text.</li>
                 <li>You can toggle back and forth between defining splits and creating labels.</li>
             </ol>
-            <button onclick="startColoring()">Define Splits</button>
-            <button onclick="createLabels()" class="blue">Create Labels</button>
+            <button onclick="toggleStrata()" id="toggleStrata" class="blue">Show High</button>
+            <button id="modeButton" onclick="toggleMode()">Switch to Labeling</button><span id="currentModeText">Current Mode: Coloring</span>
             <p>
             <button onclick="resetMap()" class="red">Reset</button>
-            <button id="exportMap" class="blue">Export Map</button>
+            <button id="exportMap">Export Map</button>
         </div>
         
         <div class="float-child" style="text-align: center;">
@@ -64,14 +64,6 @@
 
     <div id="map" style="width: 1280px; height: 720px;"></div>
 
-    <div class="float-child">
-        <p><b>ToDo</b></p>
-        <ul>
-            <li>Toggle between high and low sectors.</li>
-            <li><span style="color: green;">Done 05/29/24 - Add lines for neighboring ARTCCs/FIRs.</span></li>
-        </ul>
-    </div>
-    
     <script src="custom.js"></script>
 
     <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>

@@ -406,6 +406,7 @@
         showMarkers(markersToShow);
     });
 
+// Function to reset the map to intial defaults
     function resetMap() {
         map.eachLayer(function(layer) {
             if (layer instanceof L.GeoJSON) {
