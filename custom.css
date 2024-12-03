@@ -36,9 +36,20 @@ button {
 	color: white;
 	padding: 10px;
 	margin-right: 5px;
-	width: 150px;
+	width: 100px;
 	border: 0px;
 	border-radius: 20px;
+}
+
+.colorBtn {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+	border: 2px solid #ccc;
+	
 }
 
 .lightblue {

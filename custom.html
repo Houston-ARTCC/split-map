@@ -12,24 +12,33 @@
 </head>
 <body>
     <div class="float-container clearfix">
-        <div class="float-child" style="text-align: center;">
-            <p><b>ZHU Custom Enroute Splits</b></p>
-            <p><a href="index.html"><button class="red">Back to Menu</button></a></p>
-        </div>
         <div class="float-child">
-            <p><b>Instructions</b></p>
-            <ol style="font-size: small; line-height: 1.5em;">
+            <p><b>ZHU Custom Enroute Splits</b></p>
+            <ol style="font-size: small; line-height: 1.5em; margin-left: -25px;">
                 <li>Toggle desired sector strata.</li>
-                <li>Click on each sector to assign to a split (1-5).</li>
-                <li>When finished coloring the splits, press <b>Switch to Labeling</b>.</li>
-                <li>Click a spot on the map and enter the desired label text.</li>
-                <li>You can toggle back and forth between defining splits and creating labels.</li>
+                <li>Select a color and click sectors to paint.</li>
+                <li>Right-click to create a label.</li>
             </ol>
-            <button onclick="toggleStrata()" id="toggleStrata" class="blue">Show High</button>
-            <button id="modeButton" onclick="toggleMode()">Switch to Labeling</button><span id="currentModeText">Current Mode: Coloring</span>
+            <p><a href="index.html"><button class="blue" style="width: fit-content;">Back to Menu</button></a></p>
+        </div>
+
+        <div class="float-child">
+            <p><b>Map Controls</b></p>
+            <p><button onclick="toggleStrata()" id="toggleStrata" class="blue">Show High</button>
+            <p><button onclick="resetMap()" class="red">Reset Map</button>
+            <p><button id="exportMap">Export Map</button>
+        </div>
+        
+        <div class="float-child">
+            <p><b>Sector Colors & Labels</b>
             <p>
-            <button onclick="resetMap()" class="red">Reset</button>
-            <button id="exportMap">Export Map</button>
+            <button class="colorBtn" style="background-color: #173f5f;" onclick="setColor('#173f5f')"></button>
+            <button class="colorBtn" style="background-color: #20639b;" onclick="setColor('#20639b')"></button>
+            <button class="colorBtn" style="background-color: #3caea3;" onclick="setColor('#3caea3')"></button>
+            <button class="colorBtn" style="background-color: #f6d55c;" onclick="setColor('#f6d55c')"></button>
+            <button class="colorBtn" style="background-color: #ed553b;" onclick="setColor('#ed553b')"></button>
+            <p>
+            <button id="removeLabelsButton" class="red" style="width: fit-content;">Reset Labels</button>
         </div>
         
         <div class="float-child" style="text-align: center;">

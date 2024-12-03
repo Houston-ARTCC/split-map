@@ -25,7 +25,6 @@ var colorDefault = 'gray';
 var coloringEnabled = false;
 var labelingEnabled = false;
 var lowPolygonsLayer;
-var markers = []; // Move markers array declaration outside of any function
 
 // Add a tile layer (e.g., OpenStreetMap)
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -87,9 +86,6 @@ var geojsonData = {
         { "type": "Feature", "properties": { "name": "85", "category": "RSG", "direction": "W", "strata": "low" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -98.933333333299913, 29.15 ], [ -98.829166666699962, 29.260000000000105 ], [ -98.633888888900003, 29.449166666700023 ], [ -98.565555555599929, 29.640277777800122 ], [ -98.540277777799929, 29.795833333300038 ], [ -98.71666666669995, 30.0 ], [ -98.777777777799997, 30.041666666699996 ], [ -99.316666666699973, 30.35 ], [ -99.6, 29.875 ], [ -99.608333333299925, 29.816666666700144 ], [ -99.743333333299972, 29.76166666670008 ], [ -99.678611111099997, 29.596666666700116 ], [ -99.649166666700012, 29.426666666699987 ], [ -99.835, 29.411944444400092 ], [ -99.84, 29.27 ], [ -99.874722222200035, 29.122222222200094 ], [ -99.938333333299965, 28.977777777799986 ], [ -99.75, 28.9 ], [ -99.2, 28.883333333300129 ], [ -98.933333333299913, 29.15 ] ] ] } }
     ]
 }
-
-// Define colors
-var colors = ['#C6A75A', '#264653', '#2A9D8F', '#C6A75A', '#E76F51', '#F4A261'];
 
 // Define style for low polygons
 var lowPolygonStyle = {
@@ -160,101 +156,94 @@ function toggleStrata() {
     isLowStrataVisible = !isLowStrataVisible;
 }
 
-// Variable to keep track of current mode
-var currentMode = 'coloring'; // Default to coloring mode
 
-// Initialize the map with the default mode (coloring)
-window.onload = function() {
-    if (currentMode === 'coloring') {
-        startColoring();
-        document.getElementById("modeButton").innerText = "Switch to Labeling"; // Update button text
-        document.getElementById("currentModeText").innerText = "Current Mode: Coloring"; // Update helper text
-    }
-};
+let selectedColor = null; // This will store the currently selected color
 
-// Function to toggle between coloring and labeling modes
-function toggleMode() {
-    if (currentMode === 'coloring') {
-        // Switch to labeling mode
-        startLabeling();
-        document.getElementById("modeButton").innerText = "Switch to Coloring"; // Update button text
-        document.getElementById("currentModeText").innerText = "Current Mode: Labeling"; // Update helper text
-        currentMode = 'labeling'; // Update mode
-    } else {
-        // Switch to coloring mode
-        startColoring();
-        document.getElementById("modeButton").innerText = "Switch to Labeling"; // Update button text
-        document.getElementById("currentModeText").innerText = "Current Mode: Coloring"; // Update helper text
-        currentMode = 'coloring'; // Update mode
-    }
+// Function to set the selected color
+function setColor(color) {
+    selectedColor = color;
+    console.log("Selected color:", color); // Log the selected color
 }
 
-// Function to start coloring mode
-function startColoring() {
-    if (!coloringEnabled) {
-        // Reset labeling mode
-        labelingEnabled = false;
+// Function to color sectors when clicked
+function colorSector(e) {
+    if (selectedColor) {
+        // Get the clicked layer
+        const layer = e.target;
 
-        // Remove click event listener for creating labels
-        map.off('click');
-
-        // Determine which layer is currently active (low or high strata)
-        var activeLayer = isLowStrataVisible ? lowPolygonsLayer : highPolygonsLayer;
-
-        // Add click event to the active layer to color polygons
-        activeLayer.eachLayer(function(layer) {
-            layer.on('click', function(e) {
-                var colorIndex = prompt("Enter color index (1-5):");
-                if (colorIndex !== null && colorIndex >= 1 && colorIndex <= 5) {
-                    colorPolygons(layer, colorIndex);
-                } else {
-                    alert("Invalid color index. Please enter a number between 1 and 5.");
-                }
-            });
-        });
-
-        coloringEnabled = true;
-    }
-}
-
-// Function to color polygons
-function colorPolygons(layer, colorIndex) {
-    layer.setStyle({
-        fillColor: colors[colorIndex],
-        fillOpacity: 1
-    });
-}
-
-// Function to start labeling mode
-function startLabeling() {
-    if (!labelingEnabled) {
-        // Reset coloring mode
-        coloringEnabled = false;
-
-        // Remove click event listener for coloring polygons
-        if (isLowStrataVisible) {
-            lowPolygonsLayer.eachLayer(function(layer) {
-                layer.off('click');
+        // Ensure that the layer is a polygon and belongs to either high or low polygons layer
+        if ((highPolygonsLayer.hasLayer(layer) || lowPolygonsLayer.hasLayer(layer)) &&
+            (layer instanceof L.Polygon || layer instanceof L.MultiPolygon)) {
+            // Change the style to selected color
+            layer.setStyle({
+                fillColor: selectedColor,
+                fillOpacity: 1
             });
         } else {
-            highPolygonsLayer.eachLayer(function(layer) {
-                layer.off('click');
-            });
+            console.log("Clicked object is not a valid polygon or multipolygon in the layer:", layer);
         }
-
-        // Add click event for labeling mode
-        map.on('click', function(e) {
-            var text = prompt("Enter tooltip label/text:");
-            if (text !== null && text !== "") {
-                var marker = L.marker(e.latlng, { opacity: 0 }).addTo(map);
-                marker.bindTooltip(text, { permanent: true, direction: 'center', offset: [-10, 30] }).openTooltip();
-                markers.push(marker);
-            }
-        });
-
-        labelingEnabled = true;
     }
 }
+
+// Add event listener to both highPolygonsLayer and lowPolygonsLayer
+highPolygonsLayer.eachLayer(function(layer) {
+    layer.on('click', colorSector);
+});
+lowPolygonsLayer.eachLayer(function(layer) {
+    layer.on('click', colorSector);
+});
+
+// Array to store all the label markers
+let markers = [];
+
+// Function to create a label when the user right-clicks
+function createLabelOnRightClick(e) {
+    // Prompt the user for the label text
+    const labelText = prompt("Enter tooltip label/text:");
+
+    // If the user entered text (and didn't cancel), create a label
+    if (labelText !== null && labelText !== "") {
+        // Create a marker at the clicked location with the text as a tooltip
+        var marker = L.marker(e.latlng, { opacity: 0 }).addTo(map);
+
+        // Bind the tooltip to the marker and display it permanently
+        marker.bindTooltip(labelText, { 
+            permanent: true, 
+            direction: 'center', 
+            offset: [-10, 30] // Adjust the tooltip offset as needed
+        }).openTooltip();
+
+        // Store the marker for future removal
+        markers.push(marker);
+    }
+}
+
+// Add right-click event listener to the map for creating labels
+map.on('contextmenu', createLabelOnRightClick);
+
+// Function to remove all labels
+function removeAllLabels() {
+    // Remove all markers from the map
+    markers.forEach(marker => {
+        map.removeLayer(marker);
+    });
+
+    // Clear the array
+    markers = [];
+}
+
+// Add click event listener to the remove labels button
+document.getElementById("removeLabelsButton").addEventListener('click', removeAllLabels);
+
+
+
+
+
+
+
+
+
+
 
 // Function to reset map by reloading the page
 function resetMap() {
