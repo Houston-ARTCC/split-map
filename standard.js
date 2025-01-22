@@ -258,19 +258,19 @@
 
 // Create markers and bind tooltips
     var markers = {
-        AUSS: L.marker([30.555, -96.472], { interactive: false }),
-        CRPS: L.marker([28.782, -96.491], { interactive: false }),
+        AUSS: L.marker([30.555, -96.972], { interactive: false }),
+        CRPS: L.marker([27.782, -97.491], { interactive: false }),
         LCHS: L.marker([28.935, -93.794], { interactive: false }),
         LFKS: L.marker([31.182, -92.864], { interactive: false }),
-        NEWS: L.marker([29.184, -88.889], { interactive: false }),
+        NEWS: L.marker([29.984, -89.889], { interactive: false }),
         OCNS: L.marker([26.289, -90.800], { interactive: false }),
-        RSGS: L.marker([30.696, -99.248], { interactive: false }),
+        RSGS: L.marker([30.396, -100.248], { interactive: false }),
         WEST: L.marker([30.696, -99.248], { interactive: false }),
         NORTH: L.marker([31.182, -92.864], { interactive: false }),
-        SOUTH: L.marker([28.638, -96.187], { interactive: false }),
+        SOUTH: L.marker([28.638, -97.187], { interactive: false }),
         EAST: L.marker([28.212, -89.634], { interactive: false }),
-        WSPLIT: L.marker([30.696, -99.248], { interactive: false }),
-        ESPLIT: L.marker([28.812, -91.634], { interactive: false })
+        WSPLIT: L.marker([29.696, -98.648], { interactive: false }),
+        ESPLIT: L.marker([29.696, -91.634], { interactive: false })
     };
 
 // Add markers to the map and bind tooltips
