@@ -245,15 +245,15 @@
         CRPS: L.tooltip({ direction: "center", className: "color7", interactive: false }).setContent("87"),
         LCHS: L.tooltip({ direction: "center", className: "color6", interactive: false }).setContent("43"),
         LFKS: L.tooltip({ direction: "center", className: "color3", interactive: false }).setContent("38"),
-        NEWS: L.tooltip({ direction: "center", className: "color4", interactive: false }).setContent("27"),
+        NEWS: L.tooltip({ direction: "center", className: "color4", interactive: false }).setContent("24"),
         OCNS: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("53"),
         RSGS: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("50"),
         WEST: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("50"),
         NORTH: L.tooltip({ direction: "center", className: "color3", interactive: false }).setContent("38"),
         SOUTH: L.tooltip({ direction: "center", className: "color7", interactive: false }).setContent("87"),
-        EAST: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("43"),
+        EAST: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("24"),
         WSPLIT: L.tooltip({ direction: "center", className: "color1", interactive: false }).setContent("50"),
-        ESPLIT: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("81")
+        ESPLIT: L.tooltip({ direction: "center", className: "color5", interactive: false }).setContent("46")
     };
 
 // Create markers and bind tooltips
