@@ -38,13 +38,13 @@
 //     L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
 // Define various colors used on map
-    var color1 = '#264653';
-    var color2 = '#287271';
-    var color3 = '#2A9D8F';
-    var color4 = '#8AB17D';
-    var color5 = '#C6A75A';
-    var color6 = '#F4A261';
-    var color7 = '#E76F51';
+    var color1 = '#264653'; // current=RSG // new=RSG
+    var color6 = '#287271'; // current=AUS // new=LCH
+    var color5 = '#2A9D8F'; // current=LFK // new=OCN
+    var color3 = '#8AB17D'; // current=NEW // new=LFK
+    var color7 = '#C6A75A'; // current=OCN // new=CRP
+    var color4 = '#F4A261'; // current=LCH // new=NEW
+    var color2 = '#E76F51'; // current=CRP // new=AUS
     var colorDefault = 'gray';
 
 // Define your GeoJSON data directly as a JavaScript object
