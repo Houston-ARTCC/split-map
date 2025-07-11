@@ -13,13 +13,18 @@ map.keyboard.disable();
 if (map.tap) map.tap.disable();
 
 // Define various colors used on map
-var color1 = '#264653';
-var color2 = '#287271';
-var color3 = '#2A9D8F';
-var color4 = '#8AB17D';
-var color5 = '#C6A75A';
-var color6 = '#F4A261';
-var color7 = '#E76F51';
+var color1  = '#88b04b';  // Soft Green
+var color2  = '#6b5b95';  // Plum
+var color3  = '#ff6f91';  // Bright Pink
+var color4  = '#20639b';  // Blue
+var color5  = '#a2a2a2';  // Warm Gray
+var color6  = '#b4a24c';  // Olive
+var color7  = '#ed553b';  // Red-Orange
+var color8  = '#3caea3';  // Teal
+var color9  = '#a13941';  // Rust
+var color10 = '#f6d55c';  // Yellow
+var color11 = '#173f5f';  // Navy
+var color12 = '#57c7ff';  // Sky Blue
 var colorDefault = 'gray';
 
 var coloringEnabled = false;
@@ -288,16 +293,6 @@ function removeAllLabels() {
 
 // Add click event listener to the remove labels button
 document.getElementById("removeLabelsButton").addEventListener('click', removeAllLabels);
-
-
-
-
-
-
-
-
-
-
 
 // Function to reset map by reloading the page
 function resetMap() {
