@@ -1,146 +1,413 @@
-@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+@import 'https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap';
+#map {
+    width: 1280px;
+    height: 720px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* Make color picker modal close X match label modal */
+/* Modal close buttons use the same red as Reset Map */
+.modal-content .close,
+.modal-label-content .close {
+  color: #a02f21;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: -10px;
+  margin-right: -10px;
+  transition: color 0.2s;
+}
+.modal-content .close:hover, .modal-content .close:focus,
+.modal-label-content .close:hover, .modal-label-content .close:focus {
+  color: #ff6f91;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Modal dialog for color picker overlay */
+#colorPickerModal {
+  display: none;
+  position: fixed;
+  z-index: 2147483647;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+/* Modal dialog for color picker content */
+.modal-content {
+  background-color: #333333;
+  color: #fff;
+  position: fixed;
+  padding: 24px 36px 36px 36px;
+  border: 2px solid #30429c;
+  border-radius: 20px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 32px #000a;
+  left: 0;
+  top: 0;
+  transform: none;
+  font-family: 'Open Sans', sans-serif;
+  z-index: 2147483648;
+}
+/* Modal dialog for label input */
+.modal-label {
+  display: none;
+  position: fixed;
+  z-index: 2147483647;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+.modal-label-content {
+  background-color: #333333;
+  color: #fff;
+  position: fixed;
+  padding: 24px 36px 36px 36px;
+  border: 2px solid #30429c;
+  border-radius: 20px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 8px 32px #000a;
+  left: 0;
+  top: 0;
+  transform: none;
+  font-family: 'Open Sans', sans-serif;
+}
+.modal-label-content input[type="text"] {
+  width: 90%;
+  padding: 10px;
+  margin: 18px 0 24px 0;
+  border-radius: 12px;
+  border: 1.5px solid #30429c;
+  font-size: 1.1em;
+  background: #222;
+  color: #fff;
+  outline: none;
+  font-family: 'Open Sans', sans-serif;
+}
+.modal-label-content button {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  background: #30429c;
+  color: #fff;
+  padding: 10px 24px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 16px;
+  font-size: 1em;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #0002;
+}
+.modal-label-content button:hover, .modal-label-content button:focus {
+  background: #2A9D8F;
+  color: #fff;
+}
+
+/* Modern, consistent button styling for all menu buttons */
+button, input[type="button"], input[type="submit"] {
+  font-family: 'Roboto', 'Open Sans', Arial, sans-serif;
+  font-weight: 500;
+  background: #1976d2;
+  color: #fff;
+  padding: 10px 24px;
+  margin: 3px 4px 3px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  min-width: 140px;
+}
+.float-child > button, .float-child button.danger {
+  min-width: 180px;
+  max-width: 180px;
+  width: 180px;
+}
+button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+  background: #1565c0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Red destructive buttons for menu cards */
+button.danger {
+  background: #d32f2f;
+}
+button.danger:hover, button.danger:focus {
+  background: #b71c1c;
+}
+
+/* Modal dialog for color picker */
+.color5 {
+  background-color: #C6A75A;
+  color: #fff;
+  border: 2px solid #fff;
+}
+.color6 {
+  background-color: #F4A261;
+  color: #fff;
+  border: 2px solid #fff;
+}
+.color7 {
+  background-color: #E76F51;
+  color: #fff;
+  border: 2px solid #fff;
+}
+.colorBtn.picker {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  border: none !important;
+  box-shadow: 0 0 8px #0006;
+}
+
+#colorPickerMenu {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+}
 
 body {
-	font-family: 'Open Sans', sans-serif;
-	line-height: 1.75em;
-	font-size: 14px;
-	background-color: #222;
-	color: #cccccc;
+    font-family: 'Roboto', 'Open Sans', Arial, sans-serif;
+    line-height: 1.7em;
+    font-size: 16px;
+    background: #f5f5f5;
+    color: #222;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 .float-container {
-	display: flex;
-	align-items: stretch;
-	margin-bottom: 20px;
-	width: 1280px
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin: 32px auto 24px auto;
+    width: 1280px;
+    max-width: 1280px;
+    box-sizing: border-box;
 }
 
 .float-child {
-	float: left;
-	margin-right: 10px;
-	padding: 0px 10px 10px 15px;
-	border-radius: 20px;
-	background-color: #333333;
+    float: none;
+    margin: 0 0 24px 0;
+    padding: 32px 32px 24px 32px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 220px;
+    max-width: 640px;
+    flex: 1 1 0;
+    min-height: 250px; /* Ensures all menu cards are the same height */
+    color: #222;
 }
 
 .clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
+  content: "";
+  display: table;
+  clear: both;
 }
 
-button {
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	background-color: #b88728;
-	color: white;
-	padding: 10px;
-	margin-right: 5px;
-	width: 100px;
-	border: 0px;
-	border-radius: 20px;
-}
 
 .colorBtn {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 20px;
-	border: 2px solid #ccc;
-	
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+  border-radius: 20px;
 }
 
-.lightblue {
-	background-color: #1e8ad6;
+.colorBtn.picker {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  border: none !important;
+  box-shadow: 0 0 8px #0006;
 }
 
-.red {
-	background-color: #a02f21;
-}
-
-.blue {
-	background-color: #30429c;
-}
 
 table {
-	margin: 0 auto;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 0.95em;
+    background: #fff;
+    color: #222;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
 }
-
-tr:nth-child(odd) {
-	background-color: #444;
-}
-
-tr:nth-child(even) {
-	background-color: #555;
-}
-
 td {
-	padding: 0px 10px 0px 10px;
-	border: 1px solid #222;
+    padding: 4px 10px;
+    border: 1px solid #e0e0e0;
+    font-size: 0.95em;
+    color: #222;
+    background: #fff;
 }
 
 
 .leaflet-tooltip {
-    background-color: white;
-    font-size: x-large;
-    font-weight: bold;
-    padding-top: 0;
-    padding-bottom: 0;
+  background-color: white;
+  font-size: x-large;
+  font-weight: bold;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-.todo {
-	width:fit-content;
-	padding: 5px 15px 5px 15px;
-	border-radius: 20px;
-	background-color: #333333;
-}
 
 .color1 {
-	background-color: #264653;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #264653;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color2 {
-	background-color: #287271;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #287271;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color3 {
-	background-color: #2A9D8F;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #2A9D8F;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color4 {
-	background-color: #8AB17D;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #8AB17D;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color5 {
-	background-color: #C6A75A;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #C6A75A;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color6 {
-	background-color: #F4A261;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #F4A261;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .color7 {
-	background-color: #E76F51;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: #E76F51;
+  color: #fff;
+  border: 2px solid #fff;
 }
 
 .colorDefult {
-	background-color: gray;
-	color: #fff;
-	border: 2px solid #fff;
+  background-color: gray;
+  color: #fff;
+  border: 2px solid #fff;
 }
+
+/* --- MATERIAL DARK MODE OVERRIDE --- */
+body {
+    background: #181a20;
+    color: #e3e6eb;
+}
+
+.float-child {
+    background: #23262f;
+    color: #e3e6eb;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.32);
+}
+
+.modal-content, .modal-label-content {
+    background-color: #23262f;
+    color: #e3e6eb;
+}
+
+.modal-label-content input[type="text"] {
+    background: #181a20;
+    color: #e3e6eb;
+}
+
+button, input[type="button"], input[type="submit"], .modal-label-content button {
+    background: #1976d2;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+button:hover, input[type="button"]:hover, input[type="submit"]:hover, .modal-label-content button:hover, .modal-label-content button:focus {
+    background: #1565c0;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+}
+button.danger {
+    background: #d32f2f;
+}
+button.danger:hover, button.danger:focus {
+    background: #b71c1c;
+}
+
+table {
+    background: #23262f;
+    color: #e3e6eb;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.22);
+}
+td {
+    color: #e3e6eb;
+    background: #23262f;
+    border: 1px solid #353a45;
+}
+
+.leaflet-tooltip {
+    background-color: #23262f;
+    color: #e3e6eb;
+}
+
+.colorBtn {
+    border: 2px solid #353a45;
+}
+.colorBtn.picker {
+    border: none !important;
+    box-shadow: 0 0 8px #0006;
+}
+.color1, .color2, .color3, .color4, .color5, .color6, .color7, .colorDefult {
+    border: 2px solid #30429c !important;
+}
+.colorDefult {
+    background-color: #444b5a;
+}
+/* --- END MATERIAL DARK MODE OVERRIDE --- */
+
+/* --- MATERIAL GREEN BUTTON FOR EXPORT --- */
+button.export {
+    background: #43a047 !important; /* Material Green 600 */
+    color: #fff !important;
+    box-shadow: 0 1.5px 4px rgba(67,160,71,0.18);
+    border: none;
+}
+button.export:hover, button.export:focus {
+    background: #388e3c !important; /* Material Green 700 */
+    color: #fff !important;
+    box-shadow: 0 4px 16px rgba(67,160,71,0.22);
+}
+/* --- END MATERIAL GREEN BUTTON --- */

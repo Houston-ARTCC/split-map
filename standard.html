@@ -6,7 +6,8 @@
     <title>ZHU Standard Enroute Splits</title>
     <!-- Include Leaflet CSS and JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="standard.css" />
+    <link rel="stylesheet" href="custom.css" />
+    <!-- <link rel="stylesheet" href="standard.css" /> -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 </head>
@@ -14,21 +15,19 @@
     
     <div class="float-container clearfix">
         <div class="float-child" style="text-align: center;">
-            <p><b>ZHU Standard Enroute Splits</b></p>
-            <p><a href="index.html"><button class="red">Back to Menu</button></a></p>
+            <b>ZHU Standard Enroute Splits</b><br>
+            <a href="index.html"><button class="red">Back to Menu</button></a>
         </div>
         <div class="float-child" style="text-align: center;">
-            <p><b>Map Controls</b></p>
-            <button id="toggleStrata" class="button">Show High Strata</button>
-            <button id="toggleTracon" class="button">Show TRACONs</button>
-            <p>
-            <button id="resetMap" class="red">Reset</button>
-            <button id="exportMap" class="blue">Export Map</button>
+            <b>Map Controls</b><br>
+            <button id="toggleStrata">Show High Strata</button>
+            <button id="toggleTracon">Show TRACONs</button>
+            <button id="exportMap" class="export">Export Map</button>
+            <button id="resetMap" class="danger">Reset</button>
         </div>
         <div class="float-child" style="text-align: center;">
-            <p><b>Standard Splits</b></p>
+            <b>Standard Splits</b><br>
             <button id="splitBySpecialty" class="blue">Specialty</button>
-            <p>
             <button id="splitByDirection" class="blue">N/S/E/W</button>
             <button id="splitByEW" class="blue">E/W</button>
         </div>

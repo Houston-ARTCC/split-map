@@ -11,48 +11,47 @@
     <script src="https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js"></script>
 </head>
 <body>
+    <!-- Modal Color Picker Dialog -->
+    <div id="colorPickerModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span id="closeColorPickerModal" class="close">&times;</span>
+        <h3>Choose a color:</h3>
+        <div id="modalColorButtons">
+          <button class="colorBtn picker" style="background-color: #88b04b;" data-color="#88b04b"></button>
+          <button class="colorBtn picker" style="background-color: #6b5b95;" data-color="#6b5b95"></button>
+          <button class="colorBtn picker" style="background-color: #ff6f91;" data-color="#ff6f91"></button><br>
+          <button class="colorBtn picker" style="background-color: #20639b;" data-color="#20639b"></button>
+          <button class="colorBtn picker" style="background-color: #a2a2a2;" data-color="#a2a2a2"></button>
+          <button class="colorBtn picker" style="background-color: #b4a24c;" data-color="#b4a24c"></button><br>
+          <button class="colorBtn picker" style="background-color: #ed553b;" data-color="#ed553b"></button>
+          <button class="colorBtn picker" style="background-color: #3caea3;" data-color="#3caea3"></button>
+          <button class="colorBtn picker" style="background-color: #a13941;" data-color="#a13941"></button><br>
+          <button class="colorBtn picker" style="background-color: #f6d55c;" data-color="#f6d55c"></button>
+          <button class="colorBtn picker" style="background-color: #173f5f;" data-color="#173f5f"></button>
+          <button class="colorBtn picker" style="background-color: #57c7ff;" data-color="#57c7ff"></button>
+        </div>
+      </div>
+    </div>
     <div class="float-container clearfix">
         <div class="float-child">
-            <p><b>ZHU Custom Enroute Splits</b></p>
-            <ol style="font-size: small; line-height: 1.5em; margin-left: -25px;">
-                <li>Toggle desired sector strata.</li>
-                <li>Select a color and click sectors to paint.</li>
-                <li>Right-click to create a label.</li>
-            </ol>
-            <p><a href="index.html"><button class="blue" style="width: fit-content;">Back to Menu</button></a></p>
+            <b>ZHU Custom Enroute Splits</b>
+            <p>Toggle desired sector strata and/or TRACON visibility. <i>Left-click</i> a sector to choose a color. <i>Right-click</i> a location to create a label.
+            <p></p><button id="backToMenuBtn">Back to Menu</button>
         </div>
 
-        <div class="float-child">
-            <p><b>Map Controls</b></p>
-            <p><button onclick="toggleStrata()" id="toggleStrata" class="blue">Show High</button>
-            <p><button onclick="toggleTracon()" id="toggleTracon" class="blue">TRACONs</button>
-            <p><button onclick="resetMap()" class="red">Reset Map</button>
-            <p><button id="exportMap">Export Map</button>
-        </div>
-        
-        <div class="float-child">
-            <p><b>Sector Colors & Labels</b>
-            <p>
-            <button class="colorBtn" style="background-color: #88b04b;" onclick="setColor('#88b04b')"></button>
-            <button class="colorBtn" style="background-color: #6b5b95;" onclick="setColor('#6b5b95')"></button>
-            <button class="colorBtn" style="background-color: #ff6f91;" onclick="setColor('#ff6f91')"></button><br>
-            <button class="colorBtn" style="background-color: #20639b;" onclick="setColor('#20639b')"></button>
-            <button class="colorBtn" style="background-color: #a2a2a2;" onclick="setColor('#a2a2a2')"></button>
-            <button class="colorBtn" style="background-color: #b4a24c;" onclick="setColor('#b4a24c')"></button><br>
-            <button class="colorBtn" style="background-color: #ed553b;" onclick="setColor('#ed553b')"></button>
-            <button class="colorBtn" style="background-color: #3caea3;" onclick="setColor('#3caea3')"></button>
-            <button class="colorBtn" style="background-color: #a13941;" onclick="setColor('#a13941')"></button><br>
-            <button class="colorBtn" style="background-color: #f6d55c;" onclick="setColor('#f6d55c')"></button>
-            <button class="colorBtn" style="background-color: #173f5f;" onclick="setColor('#173f5f')"></button>
-            <button class="colorBtn" style="background-color: #57c7ff;" onclick="setColor('#57c7ff')"></button>
-            <p>
-            <button id="removeLabelsButton" class="red" style="width: fit-content;">Reset Labels</button>
-        </div>
-        
         <div class="float-child" style="text-align: center;">
-            <p><b>Specialty Consolidated</b></p>
+            <b>Map Controls</b><br>
+                <button onclick="toggleStrata()" id="toggleStrata">Toggle Strata</button><br>
+                <button onclick="toggleTracon()" id="toggleTracon">Toggle TRACONs</button><br>
+                <button id="exportMap" class="export">Export</button><br>
+                <button id="removeLabelsButton" class="danger">Reset Labels</button><br>
+                <button onclick="resetMap()" class="danger">Reset Map</button>
+        </div>
+     
+        <div class="float-child" style="text-align: center;">
+            <b>Specialty Consolidated</b>
             <table>
-                <tbody style="font-size: small; line-height: 1.5em;">
+                <tbody>
                     <tr><td>AUS</td><td>83</td></tr>
                     <tr><td>CRP</td><td>87</td></tr>
                     <tr><td>LCH</td><td>43</td></tr>
@@ -65,9 +64,9 @@
         </div>
 
         <div class="float-child" style="text-align: center;">
-            <p><b>Specialty TRACON Ownership</b></p>
+            <b>Specialty TRACON Ownership</b>
             <table>
-                <tbody style="font-size: small; line-height: 1.5em;">
+                <tbody>
                     <tr><td>AUS</td><td>AUS, I90</td></tr>
                     <tr><td>CRP</td><td>CRP, VLY, NQI</td></tr>
                     <tr><td>LCH</td><td>LCH</td></tr>
@@ -82,7 +81,11 @@
     <div id="map" style="width: 1280px; height: 720px;"></div>
 
     <script src="custom.js"></script>
-
+    <script>
+    document.getElementById('backToMenuBtn').onclick = function() {
+        window.location.href = 'index.html';
+    };
+    </script>
     <script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
 
 </body>

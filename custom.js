@@ -1,3 +1,13 @@
+// Function to remove all labels (markers)
+function removeAllLabels() {
+    markers.forEach(marker => {
+        map.removeLayer(marker);
+    });
+    markers = [];
+}
+
+// Add click event listener to the remove labels button
+document.getElementById("removeLabelsButton").addEventListener('click', removeAllLabels);
 // Initialize Leaflet map centered over Houston, TX
 var map = L.map('map',{
     zoomControl: false
@@ -139,48 +149,47 @@ var traconPolygonStyle = {
     weight: 1 // Border weight
 };
 
-// Function to determine style based on feature properties
 function polygonStyle(feature) {
     if (feature.properties.type === "neighbor") {
-        return neighborPolygonStyle;  // Apply neighborPolygonStyle with opacity 0
+        return neighborPolygonStyle;
     } else if (feature.properties.strata === "low") {
-        return lowPolygonStyle;  // Your existing low strata style
+        return lowPolygonStyle;
     } else if (feature.properties.strata === "high") {
-        return highPolygonStyle;  // Your existing high strata style
+        return highPolygonStyle;
     } else if (feature.properties.strata === "tracon") {
-        return traconPolygonStyle;  // Your existing high strata style
+        return traconPolygonStyle;
     }
-    return {};  // Default style if no other conditions match
+    return {};
 }
 
-// Create the lowPolygonsLayer with additional filter condition and add it to the map
-lowPolygonsLayer = L.geoJSON(geojsonData, {
+
+var lowPolygonsLayer = L.geoJSON(geojsonData, {
     style: polygonStyle,
-    filter: function(feature, layer) {
+    filter: function(feature) {
         return feature.properties.strata === "low" || feature.properties.type === "neighbor";
     }
 }).addTo(map);
 
-// Create the highPolygonsLayer with filter condition (do not add to map initially)
-highPolygonsLayer = L.geoJSON(geojsonData, {
+
+var highPolygonsLayer = L.geoJSON(geojsonData, {
     style: polygonStyle,
-    filter: function(feature, layer) {
+    filter: function(feature) {
         return feature.properties.strata === "high" || feature.properties.type === "neighbor";
     }
 });
 
-// Create the traconLayer with filter condition (do not add to map initially)
-traconStrataLayer = L.geoJSON(geojsonData, {
+
+var traconStrataLayer = L.geoJSON(geojsonData, {
     style: polygonStyle,
-    filter: function(feature, layer) {
+    filter: function(feature) {
         return feature.properties.strata === "tracon";
     }
 });
 
-// Define initial state of strata visibility
-isLowStrataVisible = true;  // Assuming low strata is visible by default
 
-// Initial variable state: TRACON layer is not visible
+var isLowStrataVisible = true; // Low strata visible by default
+
+
 var isTraconStrataVisible = false;
 
 // Function to toggle between low and high strata layers
@@ -190,15 +199,15 @@ function toggleStrata() {
         map.removeLayer(traconStrataLayer);
         isTraconStrataVisible = false;
         map.addLayer(highPolygonsLayer);
-        document.getElementById("toggleStrata").innerText = "Show Low";
-        document.getElementById("toggleTracon").innerText = "TRACONs";
+        // Re-attach color picker events to high polygons
+        highPolygonsLayer.eachLayer(function(layer) { attachPolygonColorMenu(layer); });
     } else {
         map.removeLayer(highPolygonsLayer);
         map.removeLayer(traconStrataLayer);
         isTraconStrataVisible = false;
         map.addLayer(lowPolygonsLayer);
-        document.getElementById("toggleStrata").innerText = "Show High";
-        document.getElementById("toggleTracon").innerText = "TRACONs";
+        // Re-attach color picker events to low polygons
+        lowPolygonsLayer.eachLayer(function(layer) { attachPolygonColorMenu(layer); });
     }
     isLowStrataVisible = !isLowStrataVisible;
 }
@@ -207,10 +216,8 @@ function toggleStrata() {
 function toggleTracon() {
     if (isTraconStrataVisible) {
         map.removeLayer(traconStrataLayer);
-        document.getElementById("toggleTracon").innerText = "TRACONs";
     } else {
         map.addLayer(traconStrataLayer);
-        document.getElementById("toggleTracon").innerText = "TRACONs";
     }
     isTraconStrataVisible = !isTraconStrataVisible;
 }
@@ -218,67 +225,209 @@ function toggleTracon() {
 
 let selectedColor = null; // This will store the currently selected color
 
-// Function to set the selected color
-function setColor(color) {
-    selectedColor = color;
-    console.log("Selected color:", color); // Log the selected color
-}
 
-// Function to color sectors when clicked
-function colorSector(e) {
-    if (selectedColor) {
-        // Get the clicked layer
-        const layer = e.target;
 
-        // Ensure that the layer is a polygon and belongs to either high or low polygons layer
-        if ((highPolygonsLayer.hasLayer(layer) || lowPolygonsLayer.hasLayer(layer)) &&
-            (layer instanceof L.Polygon || layer instanceof L.MultiPolygon)) {
-            // Change the style to selected color
-            layer.setStyle({
-                fillColor: selectedColor,
-                fillOpacity: 1
-            });
-        } else {
-            console.log("Clicked object is not a valid polygon or multipolygon in the layer:", layer);
-        }
+// --- Modal Color Picker Logic ---
+
+let colorPickerModal = document.getElementById('colorPickerModal');
+let modalColorButtons = document.getElementById('modalColorButtons');
+let closeColorPickerModal = document.getElementById('closeColorPickerModal');
+let modalTargetLayer = null;
+let modalContent = colorPickerModal.querySelector('.modal-content');
+
+function showColorPickerModal(layer, x, y) {
+    // Hide label modal if open
+    if (typeof hideLabelInputModal === 'function') hideLabelInputModal();
+    modalTargetLayer = layer;
+    colorPickerModal.style.display = 'block';
+    // Position modal-content centered at click location (x, y)
+    if (typeof x === 'number' && typeof y === 'number') {
+        const modalWidth = 340;
+        const modalHeight = 200;
+        let left = x - modalWidth / 2;
+        let top = y - modalHeight / 2;
+        if (left + modalWidth > window.innerWidth) left = window.innerWidth - modalWidth - 10;
+        if (top + modalHeight > window.innerHeight) top = window.innerHeight - modalHeight - 10;
+        if (left < 10) left = 10;
+        if (top < 10) top = 10;
+        modalContent.style.left = left + 'px';
+        modalContent.style.top = top + 'px';
+    } else {
+        // Fallback: center
+        modalContent.style.left = '50%';
+        modalContent.style.top = '20%';
     }
 }
 
-// Add event listener to both highPolygonsLayer and lowPolygonsLayer
-highPolygonsLayer.eachLayer(function(layer) {
-    layer.on('click', colorSector);
+function hideColorPickerModal() {
+    colorPickerModal.style.display = 'none';
+    modalTargetLayer = null;
+}
+
+modalColorButtons.addEventListener('click', function(e) {
+    if (e.target.classList.contains('colorBtn') && modalTargetLayer) {
+        const color = e.target.getAttribute('data-color');
+        modalTargetLayer.setStyle({ fillColor: color, fillOpacity: 1 });
+        hideColorPickerModal();
+    }
 });
-lowPolygonsLayer.eachLayer(function(layer) {
-    layer.on('click', colorSector);
+
+closeColorPickerModal.addEventListener('click', hideColorPickerModal);
+
+// Hide modal if clicking outside modal-content
+colorPickerModal.addEventListener('click', function(e) {
+    if (e.target === colorPickerModal) {
+        hideColorPickerModal();
+    }
 });
+
+function attachPolygonColorMenu(layer) {
+    layer.off('click');
+    // Ensure the polygon is interactive
+    if (typeof layer.options === 'object') {
+        layer.options.interactive = true;
+    }
+    layer.on('click', function(e) {
+        // Exclude polygons with type: 'neighbor'
+        if (layer.feature && layer.feature.properties && layer.feature.properties.type === 'neighbor') {
+            return;
+        }
+        // Use mouse coordinates for modal position
+        let x = e.originalEvent.pageX;
+        let y = e.originalEvent.pageY;
+        showColorPickerModal(layer, x, y);
+        L.DomEvent.stopPropagation(e);
+    });
+}
+
+function initPolygonColorMenus() {
+    if (typeof highPolygonsLayer !== 'undefined') {
+        highPolygonsLayer.eachLayer(function(layer) {
+            attachPolygonColorMenu(layer);
+        });
+    }
+    if (typeof lowPolygonsLayer !== 'undefined') {
+        lowPolygonsLayer.eachLayer(function(layer) {
+            attachPolygonColorMenu(layer);
+        });
+    }
+}
+
+// Call this after polygons are created and after toggling strata
+initPolygonColorMenus();
+
+// Patch toggleStrata to re-attach events after toggling
+const origToggleStrata = toggleStrata;
+window.toggleStrata = function() {
+    origToggleStrata();
+    initPolygonColorMenus();
+};
 
 // Array to store all the label markers
 let markers = [];
 
-// Function to create a label when the user right-clicks
-function createLabelOnRightClick(e) {
-    // Prompt the user for the label text
-    const labelText = prompt("Enter tooltip label/text:");
+// --- Modal Label Input Logic ---
+let labelModal = null;
+let labelModalContent = null;
+let labelModalInput = null;
+let labelModalOk = null;
+let labelModalCancel = null;
+let labelModalClose = null;
+let labelModalLatLng = null;
 
-    // If the user entered text (and didn't cancel), create a label
-    if (labelText !== null && labelText !== "") {
-        // Create a marker at the clicked location with the text as a tooltip
-        var marker = L.marker(e.latlng, { opacity: 0 }).addTo(map);
-
-        // Bind the tooltip to the marker and display it permanently
-        marker.bindTooltip(labelText, { 
-            permanent: true, 
-            direction: 'center', 
-            offset: [-10, 30] // Adjust the tooltip offset as needed
-        }).openTooltip();
-
-        // Store the marker for future removal
-        markers.push(marker);
+function ensureLabelModal() {
+    if (!document.getElementById('labelInputModal')) {
+        // Create modal HTML and append to body
+        const modalDiv = document.createElement('div');
+        modalDiv.id = 'labelInputModal';
+        modalDiv.className = 'modal-label';
+        modalDiv.innerHTML = `
+          <div class="modal-label-content">
+            <span class="close" id="closeLabelInputModal">&times;</span>
+            <h3>Enter label</h3>
+            <input type="text" id="labelInputField" maxlength="60" placeholder="Label text..." autocomplete="off" />
+            <div style="margin-top:18px;">
+              <button id="labelInputOk">OK</button>
+              <button id="labelInputCancel">Cancel</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(modalDiv);
     }
+    labelModal = document.getElementById('labelInputModal');
+    labelModalContent = labelModal.querySelector('.modal-label-content');
+    labelModalInput = document.getElementById('labelInputField');
+    labelModalOk = document.getElementById('labelInputOk');
+    labelModalCancel = document.getElementById('labelInputCancel');
+    labelModalClose = document.getElementById('closeLabelInputModal');
 }
 
-// Add right-click event listener to the map for creating labels
-map.on('contextmenu', createLabelOnRightClick);
+function showLabelInputModal(latlng, x, y) {
+    // Hide color picker modal if open
+    if (typeof hideColorPickerModal === 'function') hideColorPickerModal();
+    ensureLabelModal();
+    labelModalLatLng = latlng;
+    labelModal.style.display = 'block';
+    labelModalInput.value = '';
+    labelModalInput.focus();
+    // Center modal at click location
+    const modalWidth = 340;
+    const modalHeight = 180;
+    let left = x - modalWidth / 2;
+    let top = y - modalHeight / 2;
+    if (left + modalWidth > window.innerWidth) left = window.innerWidth - modalWidth - 10;
+    if (top + modalHeight > window.innerHeight) top = window.innerHeight - modalHeight - 10;
+    if (left < 10) left = 10;
+    if (top < 10) top = 10;
+    labelModalContent.style.left = left + 'px';
+    labelModalContent.style.top = top + 'px';
+}
+
+function hideLabelInputModal() {
+    if (labelModal) labelModal.style.display = 'none';
+    labelModalLatLng = null;
+}
+
+function createLabelMarker(labelText, latlng) {
+    var marker = L.marker(latlng, { opacity: 0 }).addTo(map);
+    marker.bindTooltip(labelText, {
+        permanent: true,
+        direction: 'center',
+        offset: [-10, 30]
+    }).openTooltip();
+    markers.push(marker);
+}
+
+// Attach modal events (after DOM ready)
+setTimeout(() => {
+    ensureLabelModal();
+    labelModalOk.onclick = function() {
+        const labelText = labelModalInput.value.trim();
+        if (labelText) {
+            createLabelMarker(labelText, labelModalLatLng);
+        }
+        hideLabelInputModal();
+    };
+    labelModalCancel.onclick = hideLabelInputModal;
+    labelModalClose.onclick = hideLabelInputModal;
+    labelModalInput.onkeydown = function(e) {
+        if (e.key === 'Enter') labelModalOk.onclick();
+        if (e.key === 'Escape') hideLabelInputModal();
+    };
+    labelModal.onclick = function(e) {
+        if (e.target === labelModal) hideLabelInputModal();
+    };
+}, 0);
+
+// Function to create a label when the user right-clicks (now uses modal)
+function createLabelOnRightClick(e) {
+    showLabelInputModal(e.latlng, e.originalEvent.pageX, e.originalEvent.pageY);
+}
+
+// Add right-click event listener to the map for creating labels (now uses modal)
+map.on('contextmenu', function(e) {
+    createLabelOnRightClick(e);
+});
 
 // Function to remove all labels
 function removeAllLabels() {
